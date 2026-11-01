@@ -1,0 +1,7 @@
+{
+  "expression": "1/(s^2+2*s+2)",
+  "kind": "pole",
+  "index": 0,
+  "re": -2,
+  "im": 3
+}

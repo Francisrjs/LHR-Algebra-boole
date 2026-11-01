@@ -1,0 +1,731 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ControlLab",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analyze": {
+      "post": {
+        "summary": "Analyze Api",
+        "operationId": "analyze_api_api_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/algebra": {
+      "post": {
+        "summary": "Algebra Api",
+        "operationId": "algebra_api_api_algebra_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlgebraInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/edit-roots": {
+      "post": {
+        "summary": "Edit Api",
+        "operationId": "edit_api_api_edit_roots_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RootInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validate-project": {
+      "post": {
+        "summary": "Validate Project",
+        "operationId": "validate_project_api_validate_project_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Index",
+        "operationId": "index__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlgebraInput": {
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "series",
+              "parallel",
+              "subtract",
+              "feedback"
+            ],
+            "title": "Operation",
+            "default": "series"
+          },
+          "functions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "minItems": 2,
+            "title": "Functions"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "functions"
+        ],
+        "title": "AlgebraInput"
+      },
+      "AnalyzeInput": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "separate",
+              "direct"
+            ],
+            "title": "Mode",
+            "default": "separate"
+          },
+          "g": {
+            "type": "string",
+            "title": "G",
+            "default": "1/(s+1)"
+          },
+          "h": {
+            "type": "string",
+            "title": "H",
+            "default": "1"
+          },
+          "l": {
+            "type": "string",
+            "title": "L",
+            "default": "1/(s+1)"
+          },
+          "k": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "K",
+            "default": 1
+          },
+          "parameters": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Parameters"
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "g",
+              "h",
+              "l",
+              "t"
+            ],
+            "title": "Target",
+            "default": "l"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/Frequency"
+          },
+          "temporal": {
+            "$ref": "#/components/schemas/Temporal"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision",
+            "default": 0
+          },
+          "assumeH1": {
+            "type": "boolean",
+            "title": "Assumeh1",
+            "default": false
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "AnalyzeInput"
+      },
+      "ChartAxis": {
+        "properties": {
+          "range": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Range"
+          },
+          "autorange": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Autorange"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ChartAxis"
+      },
+      "ChartView": {
+        "properties": {
+          "xaxis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartAxis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "yaxis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartAxis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "xaxis2": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartAxis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "yaxis2": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChartAxis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ChartView"
+      },
+      "Frequency": {
+        "properties": {
+          "min": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Min",
+            "default": 0.01
+          },
+          "max": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Max",
+            "default": 1000
+          },
+          "auto": {
+            "type": "boolean",
+            "title": "Auto",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "Frequency"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Parameter": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+            "title": "Name"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "min": {
+            "type": "number",
+            "title": "Min"
+          },
+          "max": {
+            "type": "number",
+            "title": "Max"
+          },
+          "step": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Step"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "value",
+          "min",
+          "max",
+          "step"
+        ],
+        "title": "Parameter"
+      },
+      "ProjectAlgebra": {
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "series",
+              "parallel",
+              "subtract",
+              "feedback"
+            ],
+            "title": "Operation",
+            "default": "series"
+          },
+          "functions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "minItems": 2,
+            "title": "Functions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "functions"
+        ],
+        "title": "ProjectAlgebra"
+      },
+      "ProjectInput": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "separate",
+              "direct"
+            ],
+            "title": "Mode",
+            "default": "separate"
+          },
+          "g": {
+            "type": "string",
+            "title": "G",
+            "default": "1/(s+1)"
+          },
+          "h": {
+            "type": "string",
+            "title": "H",
+            "default": "1"
+          },
+          "l": {
+            "type": "string",
+            "title": "L",
+            "default": "1/(s+1)"
+          },
+          "k": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "K",
+            "default": 1
+          },
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/Parameter"
+            },
+            "type": "array",
+            "title": "Parameters"
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "g",
+              "h",
+              "l",
+              "t"
+            ],
+            "title": "Target",
+            "default": "l"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/Frequency"
+          },
+          "temporal": {
+            "$ref": "#/components/schemas/Temporal"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision",
+            "default": 0
+          },
+          "assumeH1": {
+            "type": "boolean",
+            "title": "Assumeh1",
+            "default": false
+          },
+          "format": {
+            "type": "string",
+            "const": "controllab",
+            "title": "Format"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schemaversion"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "bode",
+              "lgr",
+              "plano",
+              "temporal",
+              "algebra"
+            ],
+            "title": "View"
+          },
+          "asymptotic": {
+            "type": "boolean",
+            "title": "Asymptotic"
+          },
+          "history": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "History"
+          },
+          "algebra": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectAlgebra"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charts": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ChartView"
+            },
+            "propertyNames": {
+              "enum": [
+                "bode-chart",
+                "lgr-chart",
+                "plano-chart",
+                "temporal-chart"
+              ]
+            },
+            "type": "object",
+            "title": "Charts"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "parameters",
+          "format",
+          "schemaVersion",
+          "view",
+          "asymptotic",
+          "history"
+        ],
+        "title": "ProjectInput"
+      },
+      "RootInput": {
+        "properties": {
+          "expression": {
+            "type": "string",
+            "title": "Expression"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "pole",
+              "zero"
+            ],
+            "title": "Kind",
+            "default": "pole"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Index"
+          },
+          "re": {
+            "type": "number",
+            "title": "Re"
+          },
+          "im": {
+            "type": "number",
+            "title": "Im",
+            "default": 0
+          },
+          "parameters": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expression",
+          "index",
+          "re"
+        ],
+        "title": "RootInput"
+      },
+      "Temporal": {
+        "properties": {
+          "signal": {
+            "type": "string",
+            "enum": [
+              "step",
+              "ramp",
+              "impulse"
+            ],
+            "title": "Signal",
+            "default": "step"
+          },
+          "duration": {
+            "type": "number",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Duration",
+            "default": 10
+          },
+          "amplitude": {
+            "type": "number",
+            "title": "Amplitude",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "title": "Temporal"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

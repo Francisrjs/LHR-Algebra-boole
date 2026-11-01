@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "description": "Reference models for ControlLab validation; MATLAB generates the expected transfer functions and responses.",
+  "frequency": { "min": 0.01, "max": 1000, "samples": 500 },
+  "time": { "start": 0, "stop": 15, "samples": 1000 },
+  "cases": [
+    {
+      "id": "C01",
+      "description": "Polos reales, respuesta temporal y cierre de lazo",
+      "model": { "gNum": [1], "gDen": [1, 3, 2], "hNum": [1], "hDen": [1] },
+      "runs": [
+        { "name": "step", "payload": { "mode": "separate", "g": "1/((s+1)*(s+2))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } },
+        { "name": "ramp", "payload": { "mode": "separate", "g": "1/((s+1)*(s+2))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "ramp", "duration": 15, "amplitude": 1 } } },
+        { "name": "impulse", "payload": { "mode": "separate", "g": "1/((s+1)*(s+2))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "impulse", "duration": 15, "amplitude": 1 } } }
+      ]
+    },
+    {
+      "id": "C02",
+      "description": "LGR, ruptura, asíntotas y ganancia crítica",
+      "model": { "gNum": [1], "gDen": [1, 4, 3, 0], "hNum": [1], "hDen": [1] },
+      "runs": [
+        { "name": "K=6", "payload": { "mode": "separate", "g": "1/(s*(s+1)*(s+3))", "h": "1", "k": 6, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } },
+        { "name": "K=12", "payload": { "mode": "separate", "g": "1/(s*(s+1)*(s+3))", "h": "1", "k": 12, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } },
+        { "name": "K=18", "payload": { "mode": "separate", "g": "1/(s*(s+1)*(s+3))", "h": "1", "k": 18, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }
+      ]
+    },
+    { "id": "C03", "description": "Efecto de un cero en el LGR", "model": { "gNum": [1, 2], "gDen": [1, 4, 3, 0], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "(s+2)/(s*(s+1)*(s+3))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C04", "description": "Polos complejos y respuesta oscilatoria", "model": { "gNum": [1], "gDen": [1, 2, 2], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "1/(s^2+2*s+2)", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C05", "description": "Polos repetidos", "model": { "gNum": [1], "gDen": [1, 2, 1], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "1/(s^2+2*s+1)", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C06", "description": "Polo en el origen, Bode y estabilidad", "model": { "gNum": [1], "gDen": [1, 1, 0], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "1/(s*(s+1))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C07", "description": "Cero en semiplano derecho", "model": { "gNum": [1, -2], "gDen": [1, 4, 3], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "(s-2)/((s+1)*(s+3))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    {
+      "id": "C08",
+      "description": "G/H separados frente a GH directo; T solo existe en el modo separado",
+      "model": { "gNum": [2], "gDen": [1, 1], "hNum": [3], "hDen": [1, 2] },
+      "runs": [
+        { "name": "G/H separado", "payload": { "mode": "separate", "g": "2/(s+1)", "h": "3/(s+2)", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } },
+        { "name": "GH directo", "payload": { "mode": "direct", "l": "6/((s+1)*(s+2))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 }, "assumeH1": false } }
+      ]
+    },
+    { "id": "C09", "description": "Cancelación polo-cero conservando el modelo original", "model": { "gNum": [1, 1], "gDen": [1, 3, 2], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "(s+1)/((s+1)*(s+2))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C10", "description": "Polo inestable en lazo abierto", "model": { "gNum": [1], "gDen": [1, -1], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "1/(s-1)", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C11", "description": "Polos imaginarios y oscilación sostenida en lazo abierto", "model": { "gNum": [1], "gDen": [1, 0, 1], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "1/(s^2+1)", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] },
+    { "id": "C12", "description": "Bode con cero y polos en escalas distintas", "model": { "gNum": [1, 10], "gDen": [1, 101, 100], "hNum": [1], "hDen": [1] }, "runs": [{ "name": "base", "payload": { "mode": "separate", "g": "(s+10)/((s+1)*(s+100))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 15, "amplitude": 1 } } }] }
+  ],
+  "edgeCases": {
+    "multipleMargins": {
+      "description": "Sistema resonante con dos cruces de ganancia y márgenes de fase múltiples",
+      "model": { "num": [5], "den": [1, 0.22, 101.004, 2.2, 100] },
+      "payload": { "mode": "separate", "g": "5/((s^2+0.02*s+1)*(s^2+0.2*s+100))", "h": "1", "k": 1, "target": "l", "frequency": { "min": 0.01, "max": 1000, "auto": false }, "temporal": { "signal": "step", "duration": 2, "amplitude": 1 } }
+    }
+  }
+}

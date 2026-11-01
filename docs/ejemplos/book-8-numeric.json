@@ -1,0 +1,390 @@
+{
+  "schemaVersion": 1,
+  "nodes": [
+    {
+      "id": "R",
+      "name": "R",
+      "type": "input",
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "inputs": [],
+      "outputs": [
+        "out"
+      ]
+    },
+    {
+      "id": "S1",
+      "name": "S1",
+      "type": "sum",
+      "position": {
+        "x": 180,
+        "y": 200
+      },
+      "inputs": [
+        "a",
+        "b",
+        "c"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "signs": {
+        "a": "+",
+        "b": "-",
+        "c": "-"
+      }
+    },
+    {
+      "id": "H2",
+      "name": "H2",
+      "type": "transfer_function",
+      "position": {
+        "x": 570,
+        "y": 700
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/4"
+    },
+    {
+      "id": "K4",
+      "name": "K4",
+      "type": "transfer_function",
+      "position": {
+        "x": 780,
+        "y": 700
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/5"
+    },
+    {
+      "id": "G1",
+      "name": "G1",
+      "type": "transfer_function",
+      "position": {
+        "x": 380,
+        "y": 200
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/(s+1)"
+    },
+    {
+      "id": "J1",
+      "name": "J1",
+      "type": "junction",
+      "position": {
+        "x": 570,
+        "y": 200
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ]
+    },
+    {
+      "id": "G2",
+      "name": "G2",
+      "type": "transfer_function",
+      "position": {
+        "x": 590,
+        "y": 330
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "2/(s+2)"
+    },
+    {
+      "id": "K5",
+      "name": "K5",
+      "type": "transfer_function",
+      "position": {
+        "x": 590,
+        "y": -160
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "2"
+    },
+    {
+      "id": "S3",
+      "name": "S3",
+      "type": "sum",
+      "position": {
+        "x": 980,
+        "y": -160
+      },
+      "inputs": [
+        "a",
+        "b"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "signs": {
+        "a": "+",
+        "b": "+"
+      }
+    },
+    {
+      "id": "JC",
+      "name": "JC",
+      "type": "junction",
+      "position": {
+        "x": 1400,
+        "y": 330
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ]
+    },
+    {
+      "id": "K6",
+      "name": "K6",
+      "type": "transfer_function",
+      "position": {
+        "x": 980,
+        "y": 20
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/10"
+    },
+    {
+      "id": "S2",
+      "name": "S2",
+      "type": "sum",
+      "position": {
+        "x": 780,
+        "y": 200
+      },
+      "inputs": [
+        "a",
+        "b",
+        "c"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "signs": {
+        "a": "+",
+        "b": "+",
+        "c": "-"
+      }
+    },
+    {
+      "id": "H1",
+      "name": "H1",
+      "type": "transfer_function",
+      "position": {
+        "x": 980,
+        "y": 520
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/2"
+    },
+    {
+      "id": "G3",
+      "name": "G3",
+      "type": "transfer_function",
+      "position": {
+        "x": 1180,
+        "y": 330
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ],
+      "expression": "1/(s+3)"
+    },
+    {
+      "id": "C",
+      "name": "C",
+      "type": "output",
+      "position": {
+        "x": 1810,
+        "y": 200
+      },
+      "inputs": [
+        "in"
+      ],
+      "outputs": [
+        "out"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "sourceNodeId": "R",
+      "sourcePortId": "out",
+      "targetNodeId": "S1",
+      "targetPortId": "a"
+    },
+    {
+      "id": "e1",
+      "sourceNodeId": "H2",
+      "sourcePortId": "out",
+      "targetNodeId": "S1",
+      "targetPortId": "b"
+    },
+    {
+      "id": "e2",
+      "sourceNodeId": "K4",
+      "sourcePortId": "out",
+      "targetNodeId": "S1",
+      "targetPortId": "c"
+    },
+    {
+      "id": "e3",
+      "sourceNodeId": "S1",
+      "sourcePortId": "out",
+      "targetNodeId": "G1",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e4",
+      "sourceNodeId": "G1",
+      "sourcePortId": "out",
+      "targetNodeId": "J1",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e5",
+      "sourceNodeId": "J1",
+      "sourcePortId": "out",
+      "targetNodeId": "G2",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e6",
+      "sourceNodeId": "J1",
+      "sourcePortId": "out",
+      "targetNodeId": "K5",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e7",
+      "sourceNodeId": "K5",
+      "sourcePortId": "out",
+      "targetNodeId": "S3",
+      "targetPortId": "a"
+    },
+    {
+      "id": "e8",
+      "sourceNodeId": "JC",
+      "sourcePortId": "out",
+      "targetNodeId": "S3",
+      "targetPortId": "b"
+    },
+    {
+      "id": "e9",
+      "sourceNodeId": "S3",
+      "sourcePortId": "out",
+      "targetNodeId": "K6",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e10",
+      "sourceNodeId": "G2",
+      "sourcePortId": "out",
+      "targetNodeId": "S2",
+      "targetPortId": "a"
+    },
+    {
+      "id": "e11",
+      "sourceNodeId": "K6",
+      "sourcePortId": "out",
+      "targetNodeId": "S2",
+      "targetPortId": "b"
+    },
+    {
+      "id": "e12",
+      "sourceNodeId": "H1",
+      "sourcePortId": "out",
+      "targetNodeId": "S2",
+      "targetPortId": "c"
+    },
+    {
+      "id": "e13",
+      "sourceNodeId": "S2",
+      "sourcePortId": "out",
+      "targetNodeId": "G3",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e14",
+      "sourceNodeId": "G3",
+      "sourcePortId": "out",
+      "targetNodeId": "JC",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e15",
+      "sourceNodeId": "JC",
+      "sourcePortId": "out",
+      "targetNodeId": "C",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e16",
+      "sourceNodeId": "JC",
+      "sourcePortId": "out",
+      "targetNodeId": "H1",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e17",
+      "sourceNodeId": "JC",
+      "sourcePortId": "out",
+      "targetNodeId": "H2",
+      "targetPortId": "in"
+    },
+    {
+      "id": "e18",
+      "sourceNodeId": "JC",
+      "sourcePortId": "out",
+      "targetNodeId": "K4",
+      "targetPortId": "in"
+    }
+  ]
+}

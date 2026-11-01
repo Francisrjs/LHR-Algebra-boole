@@ -1,0 +1,7 @@
+{
+  "operation": "parallel",
+  "functions": [
+    "1/(s+1)",
+    "1/(s+2)"
+  ]
+}

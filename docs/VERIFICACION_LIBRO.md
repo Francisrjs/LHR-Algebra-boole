@@ -1,0 +1,1 @@
+Ejercicios 7 y 8: fuente PDF página 18, impresa 38. PASS: equivalencia simbólica de cuatro ejemplos y orden inverso de nodos, suite backend 111 aprobadas. Solicitudes en ejemplos/book-*.json para /docs. NOT_RUN: validación visual del navegador y LGR. Referencias MATLAB sin cambios.

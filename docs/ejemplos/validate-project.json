@@ -1,0 +1,24 @@
+{
+  "format": "controllab",
+  "schemaVersion": 1,
+  "mode": "separate",
+  "g": "1/(s+1)",
+  "h": "1",
+  "l": "1/(s+1)",
+  "k": 1,
+  "parameters": [],
+  "view": "bode",
+  "target": "l",
+  "frequency": {
+    "min": 0.01,
+    "max": 1000,
+    "auto": true
+  },
+  "temporal": {
+    "signal": "step",
+    "duration": 10,
+    "amplitude": 1
+  },
+  "asymptotic": false,
+  "history": []
+}
