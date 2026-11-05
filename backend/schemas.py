@@ -71,7 +71,7 @@ class ProjectInput(AnalyzeInput):
     format:Literal['controllab']
     schemaVersion:Literal[1]
     parameters:list[Parameter]
-    view:Literal['bode','lgr','plano','temporal','algebra']
+    view:Literal['bode','lgr','plano','temporal','algebra','routh']
     factorLines:bool=False
     factorMarks:bool=False
     asymptotic:bool

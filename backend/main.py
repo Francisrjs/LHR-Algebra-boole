@@ -43,3 +43,8 @@ if (DIST/'assets').exists():app.mount('/assets',StaticFiles(directory=DIST/'asse
 def index():
     if not (DIST/'index.html').exists():raise HTTPException(503,'Falta compilar frontend: ejecutá setup.cmd.')
     return FileResponse(DIST/'index.html')
+
+@app.post("/api/routh")
+def routh_api(data:dict):
+    from backend.routh import calculate
+    return call(calculate,data)

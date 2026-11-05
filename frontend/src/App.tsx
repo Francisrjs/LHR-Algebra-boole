@@ -1,3 +1,5 @@
+import {locusMarkers} from "./locusMarkers";
+import Routh, {defaultRouth} from "./Routh";
 import BodeWorkspace from "./BodeWorkspace";
 import {factorColors,factorTraces,factorAnnotations} from "./bodePresentation";
 import BodeSummary from "./BodeSummary";
@@ -18,6 +20,7 @@ import {
 } from "./types";
 const colors = ["#40d6e7", "#a293ff", "#f5be70", "#5ecab3", "#ea7f95"];
 const views = [
+ ["routh", "▦", "Estabilidad · Routh"],
   ["bode", "◫", "Diagrama de Bode"],
   ["lgr", "⌁", "Lugar de las raíces"],
   ["plano", "⊗", "Polos y ceros"],
@@ -209,21 +212,21 @@ export default function App() {
     l = result?.locus,
     t = result?.temporal;
   const bodeRange: [number, number] | undefined = b?.omega?.length
-    ? [Math.log10(b.omega[0]), Math.log10(b.omega[b.omega.length - 1])]
+    ? [-1, Math.max(1, Math.log10(b.omega[b.omega.length - 1]))]
     : undefined;
   const bodeView = {...p.charts?.["bode-chart"]};
   for (const axis of ["xaxis", "xaxis2"] as const) {
-    if (bodeView[axis]?.autorange && bodeRange)
+    if (bodeRange && (bodeView[axis]?.autorange || !bodeView[axis]?.range))
       bodeView[axis] = {range: bodeRange, autorange: false};
   }
   const xaxis = {
     type: "log" as const,
     range: bodeRange,
     autorange: false,
-    title: { text: "Frecuencia ω (rad/s)" },
+    title: { text: "Frecuencia ω (rad/s) · escala logarítmica" },
     tickmode: "array" as const,
     tickvals: Array.from({length: 25}, (_, i) => 10 ** (i - 12)),
-    ticktext: Array.from({length: 25}, (_, i) => (10 ** (i - 12)).toLocaleString("es-AR", {maximumFractionDigits: 12, useGrouping: false})),
+    ticktext: Array.from({length: 25}, (_, i) => (10 ** (i - 12)).toLocaleString("es-AR", {maximumSignificantDigits: 7})),
     minor: { showgrid: true, gridcolor: "#1b2a3c", ticks: "inside" as const },
     gridcolor: "#26374d",
     zerolinecolor: "#49617e",
@@ -259,12 +262,12 @@ export default function App() {
                 b.asymMagnitude,
                 "Magnitud asintótica",
                 colors[2],
-                { line: { color: colors[2], dash: "dash", width: 1.6 } },
+                { line: { color: colors[2], dash: "solid", width: 3.2 } },
               ),
               curve(b.omega, b.asymPhase, "Fase asintótica", colors[4], {
                 xaxis: "x2",
                 yaxis: "y2",
-                line: { color: colors[4], dash: "dash", width: 1.6 },
+                line: { color: colors[4], dash: "solid", width: 3.2 },
               }),
             ]
           : []),
@@ -667,7 +670,7 @@ export default function App() {
               </button>
             </div>
           )}
-          <div className="analysisgrid">
+          <div className={"analysisgrid" + (p.view === "routh" ? " routh-grid" : "")}>
             <div className="editorcolumn">
               <Panel title="Modelo del sistema" eyebrow="01 / ENTRADA">
                 <div className="segmented">
@@ -864,7 +867,7 @@ export default function App() {
                   title="Respuesta en frecuencia"
                   eyebrow="02 / MAGNITUD Y FASE"
                 >
-                  <BodeWorkspace decomposition={decomposition} lines={factorLines} marks={factorMarks} onLines={v=>update({factorLines:v})} onMarks={v=>update({factorMarks:v})} render={transform=>{const chart=transform(bodeData,bodeLayout);return <>
+                  <BodeWorkspace decomposition={decomposition} lines={factorLines} marks={factorMarks} onLines={v=>update({factorLines:v})} onMarks={v=>update({factorMarks:v})} onAsymptotic={v=>update({asymptotic:v})} onFitPhase={()=>update({charts:{...p.charts,"bode-chart":{...p.charts?.["bode-chart"],yaxis2:{autorange:true}}}})} onFitVertical={()=>update({charts:{...p.charts,"bode-chart":{...p.charts?.["bode-chart"],xaxis:{range:bodeRange,autorange:false},xaxis2:{range:bodeRange,autorange:false},yaxis:{autorange:true},yaxis2:{autorange:true}}}})} render={transform=>{const chart=transform(bodeData,bodeLayout);return <>
                   <div className="charttools">
                     <label>
                       <input
@@ -874,9 +877,9 @@ export default function App() {
                           update({ asymptotic: e.target.checked })
                         }
                       />{" "}
-                      Aproximaciones asintóticas
+                      Suma total asintótica (rectas)
                     </label>
-                    <span>Curvas exactas · motor Python</span>
+                    <span>Exacta: curva real · Asintótica: rectas para la hoja</span>
                   </div>
 
                   <Chart
@@ -901,11 +904,13 @@ export default function App() {
                 </Panel>
               )}
               {p.view === "bode" && <BodeSummary data={decomposition} colors={factorColors}/> }
+              {p.view === "routh" && <Routh value={p.routh || defaultRouth} onChange={routh=>update({routh})}/>}
               {p.view === "lgr" && (
                 <Panel
                   title="Trayectorias de los polos"
                   eyebrow="02 / 1 + K·L₀(s) = 0"
                 >
+                  <button disabled={!result} onClick={()=>update({view:"routh",routh:{source:"locus",expression:result?.models.l0.expression || p.l,k:p.k}})}>Analizar con Routh</button>
                   {l?.error && <div className="warning">{l.error}</div>}
                   <Chart
                     revision={result?.revision}
@@ -945,6 +950,7 @@ export default function App() {
                                 colors[i % colors.length],
                               ),
                             ),
+                            ...locusMarkers(l),
                             points(l.openPoles, "Polos de L₀", "x", "#f58399"),
                             points(
                               l.zeros,
@@ -970,7 +976,7 @@ export default function App() {
                     }}
                   />
                   <div className="chartfooter">
-                    K = {fmt(p.k)} · Modificá K para desplazar los polos
+                    Cruces y rupturas: sus etiquetas muestran la posición; al pasar el cursor verás K. K = {fmt(p.k)} · Modificá K para desplazar los polos
                     cerrados.
                   </div>
                 </Panel>
@@ -1561,7 +1567,7 @@ export default function App() {
                       <b>
                         {l?.breakaways
                           .map((x) =>
-                            typeof x === "number" ? fmt(x) : rootText(x),
+                            typeof x === "number" ? fmt(x) : rootText(x) + (x.k !== undefined ? " · K=" + fmt(x.k) : ""),
                           )
                           .join(", ") || "Ninguna"}
                       </b>

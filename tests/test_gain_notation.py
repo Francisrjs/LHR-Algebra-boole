@@ -20,3 +20,21 @@ def test_exercise_external_gain_applied_once(mode):
 @pytest.mark.parametrize('source',['K*K/(s+1)','1/(s+K)','K+1'])
 def test_gain_not_allowed_as_internal_parameter(source):
  with pytest.raises(ValueError):parse_tf(source,gain_placeholder=True)
+
+@pytest.mark.parametrize('source',['(1/(s*(s+1)*(s+3)))*(K)','K/(s*(s+1)*(s+3))','(K)*(1/(s*(s+1)*(s+3)))'])
+def test_gain_factor_position(source):
+ model=parse_tf(source,gain_placeholder=True)
+ np.testing.assert_allclose(model.den[0][0],[1,4,3,0])
+ np.testing.assert_allclose(model.num[0][0],[1])
+
+@pytest.mark.parametrize('mode',['direct','separate'])
+@pytest.mark.parametrize('k',[0,2,6])
+def test_trailing_gain_analysis_matches_base(mode,k):
+ field='l' if mode=='direct' else 'g'
+ base='1/(s*(s+1)*(s+3))'
+ settings={'mode':mode,'k':k,'target':'l'}
+ actual=analyze({**settings,field:'('+base+')*(K)'})
+ expected=analyze({**settings,field:base})
+ for key in ['l0','l']:
+  np.testing.assert_allclose(actual['models'][key]['num'],expected['models'][key]['num'])
+  np.testing.assert_allclose(actual['models'][key]['den'],expected['models'][key]['den'])

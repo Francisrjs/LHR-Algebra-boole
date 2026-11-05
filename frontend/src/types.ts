@@ -26,6 +26,7 @@ export type Parameter = {
   step: number;
 };
 export type Project = {
+ routh?: {source:string;expression:string;k:number};
   blockDiagram?: { schemaVersion: 1; nodes: Array<Record<string, unknown>>; edges: Array<Record<string, unknown>> };
   algebra?: { operation: string; functions: string[] };
   charts?: Record<string, ChartView>;
@@ -94,7 +95,7 @@ export type Analysis = {
     closedPoles: Root[];
     centroid: number | null;
     angles: number[];
-    breakaways: Root[];
+    breakaways: (Root & {k?:number})[];
     crossings: { omega: number; k: number }[];
     error?: string;
   };
@@ -133,7 +134,7 @@ export function validateProject(v: unknown): asserts v is Project {
     p.schemaVersion !== 1 ||
     !["separate", "direct"].includes(p.mode) ||
     !["g", "h", "l", "t"].includes(p.target) ||
-    !["bode", "lgr", "plano", "temporal", "algebra"].includes(p.view) ||
+    !["bode", "lgr", "plano", "temporal", "algebra", "routh"].includes(p.view) ||
     ![p.g, p.h, p.l].every((x) => typeof x === "string") ||
     !Number.isFinite(p.k) ||
     p.k < 0 ||

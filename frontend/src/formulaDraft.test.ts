@@ -10,3 +10,5 @@ describe('formula draft validation',()=>{
  it('restricts external gain to its leading factor',()=>{expect(()=>prepareFormula('K/(s+1)',[],false)).toThrow();expect(()=>prepareFormula('s+K',[],true)).toThrow();});
  it('accepts scientific notation',()=>expect(prepareFormula('1e-3/(s+1)',[],true)).toBe('1e-3/(s+1)'));
 });
+
+it('accepts external K on either side without allowing internal K',()=>{for(const source of ['(1/(s*(s+1)*(s+3)))*(K)','K/(s+1)','(K)*(1/(s+1))'])expect(()=>prepareFormula(source,[],true)).not.toThrow();for(const source of ['1/(s+K)','K*K','s+K','K^2'])expect(()=>prepareFormula(source,[],true)).toThrow()});

@@ -20,13 +20,27 @@ export function prepareFormula(source: string, parameters: string[], allowK: boo
   for(const name of names){
     if(name==='s')continue;
     if(name==='K'){
-      if(!allowK)throw Error('K se admite como factor inicial de G o GH, no en H.');
-      if(tokens[0]!=='K' || names.filter(x=>x==='K').length!==1 || !['*','('].includes(tokens[1]))throw Error('Escribí K una sola vez como factor inicial: K*(...).');
+      if(!allowK)throw Error('K se admite como factor externo de G o GH, no en H.');
+      if(names.filter(x=>x==='K').length!==1)throw Error('Usá K una sola vez como factor multiplicativo externo.');
     } else if(!parameters.includes(name)) throw Error(`Parámetro desconocido: ${name}. Agregalo a la lista de parámetros.`);
   }
   const out:string[]=[];
   for(const token of tokens){const last=out.at(-1);if(last && (last===')'||/^[\w.]/.test(last)) && (token==='('||/^[\w.]/.test(token)))out.push('*');out.push(token);}
   const normalized=out.join('');
   try{expressionLatex(normalized);}catch{throw Error('Expresión incompleta: revisá los operadores, las potencias y los paréntesis.');}
+  if(names.includes('K')) {
+    let i=0;
+    const fail=()=>{throw Error('Usá K como factor externo: K*G(s) o G(s)*K, fuera de sumas, potencias y denominadores.');};
+    function atom():boolean {
+      const token=out[i++];
+      if(token==='('){const has=sum();if(out[i++]!==')')return fail();return has;}
+      if(token==='+'||token==='-')return atom();
+      return token==='K';
+    }
+    function power():boolean {const has=atom();if(out[i]==='^'||out[i]==='**'){i++;const rhs=power();if(has||rhs)fail();}return has;}
+    function product():boolean {let has=power();while(out[i]==='*'||out[i]==='/'){const op=out[i++],rhs=power();if(op==='/'&&rhs)fail();has=has||rhs;}return has;}
+    function sum():boolean {let has=product();while(out[i]==='+'||out[i]==='-'){i++;const rhs=product();if(has||rhs)fail();has=has||rhs;}return has;}
+    sum();
+  }
   return normalized;
 }

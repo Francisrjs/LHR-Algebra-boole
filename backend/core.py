@@ -63,10 +63,22 @@ def parse_tf(source, parameters=None, gain_placeholder=False):
             raise ValueError("Hay paréntesis de cierre ')' de más.") from exc
         raise ValueError("Expresión incompleta o mal formada. Revisá operadores y paréntesis.") from exc
     if gain_placeholder and re.search(r'\bK\b', normalized):
-        # K denotes the external gain only as one overall leading factor.
-        if not normalized.startswith('K*') or len(re.findall(r'\bK\b', normalized)) != 1:
-            raise ValueError("Escribí K una sola vez como factor inicial: K*(...). Se aplica desde el control de ganancia.")
-        tree = ast.parse(normalized[2:], mode='eval')
+        message = "Usá K una sola vez como factor multiplicativo externo: K*G(s) o G(s)*K."
+        if sum(isinstance(node, ast.Name) and node.id == 'K' for node in ast.walk(tree)) != 1:
+            raise ValueError(message)
+        def contains_gain(node):
+            return any(isinstance(child, ast.Name) and child.id == 'K' for child in ast.walk(node))
+        def remove_gain(node):
+            if not contains_gain(node): return node
+            if isinstance(node, ast.Name): return ast.Constant(value=1)
+            if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+                node.operand = remove_gain(node.operand); return node
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult):
+                node.left = remove_gain(node.left); node.right = remove_gain(node.right); return node
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div) and not contains_gain(node.right):
+                node.left = remove_gain(node.left); return node
+            raise ValueError(message)
+        tree.body = remove_gain(tree.body)
 
     def visit(n,depth=0):
 

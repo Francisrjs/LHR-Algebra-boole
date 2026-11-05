@@ -1,0 +1,1042 @@
+[
+  {
+    "id": "stable-1",
+    "group": "stable",
+    "expression": "(s+1)^2*(s+2)",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-1",
+    "group": "rhp",
+    "expression": "(s-1)*(s+2)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-1",
+    "group": "boundary",
+    "expression": "(s+1)*(s^2+1)",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-1",
+    "group": "repeated-axis",
+    "expression": "(s^2+1)^2",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-1",
+    "group": "mixed",
+    "expression": "(s+1)^2*(s^2+1)",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-1",
+    "group": "epsilon",
+    "expression": "s^3+1*s+1",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-1",
+    "group": "zero-row",
+    "expression": "s^4-1",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-1",
+    "group": "origin",
+    "expression": "s*(s+1)^2",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-1",
+    "group": "negative",
+    "expression": "-(s+1)*(s+2)",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-1",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "stable-2",
+    "group": "stable",
+    "expression": "(s+2)^2*(s+3)",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-2",
+    "group": "rhp",
+    "expression": "(s-2)*(s+3)",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-2",
+    "group": "boundary",
+    "expression": "(s+2)*(s^2+4)",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-2",
+    "group": "repeated-axis",
+    "expression": "(s^2+4)^2",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-2",
+    "group": "mixed",
+    "expression": "(s+2)^2*(s^2+4)",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-2",
+    "group": "epsilon",
+    "expression": "s^3+2*s+1",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-2",
+    "group": "zero-row",
+    "expression": "s^4-16",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-2",
+    "group": "origin",
+    "expression": "s*(s+2)^2",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-2",
+    "group": "negative",
+    "expression": "-(s+2)*(s+3)",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-2",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "stable-3",
+    "group": "stable",
+    "expression": "(s+3)^2*(s+4)",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-3",
+    "group": "rhp",
+    "expression": "(s-3)*(s+4)",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-3",
+    "group": "boundary",
+    "expression": "(s+3)*(s^2+9)",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-3",
+    "group": "repeated-axis",
+    "expression": "(s^2+9)^2",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-3",
+    "group": "mixed",
+    "expression": "(s+3)^2*(s^2+9)",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-3",
+    "group": "epsilon",
+    "expression": "s^3+3*s+1",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-3",
+    "group": "zero-row",
+    "expression": "s^4-81",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-3",
+    "group": "origin",
+    "expression": "s*(s+3)^2",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-3",
+    "group": "negative",
+    "expression": "-(s+3)*(s+4)",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-3",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "stable-4",
+    "group": "stable",
+    "expression": "(s+4)^2*(s+5)",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-4",
+    "group": "rhp",
+    "expression": "(s-4)*(s+5)",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-4",
+    "group": "boundary",
+    "expression": "(s+4)*(s^2+16)",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-4",
+    "group": "repeated-axis",
+    "expression": "(s^2+16)^2",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-4",
+    "group": "mixed",
+    "expression": "(s+4)^2*(s^2+16)",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-4",
+    "group": "epsilon",
+    "expression": "s^3+4*s+1",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-4",
+    "group": "zero-row",
+    "expression": "s^4-256",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-4",
+    "group": "origin",
+    "expression": "s*(s+4)^2",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-4",
+    "group": "negative",
+    "expression": "-(s+4)*(s+5)",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-4",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "stable-5",
+    "group": "stable",
+    "expression": "(s+5)^2*(s+6)",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-5",
+    "group": "rhp",
+    "expression": "(s-5)*(s+6)",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-5",
+    "group": "boundary",
+    "expression": "(s+5)*(s^2+25)",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-5",
+    "group": "repeated-axis",
+    "expression": "(s^2+25)^2",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-5",
+    "group": "mixed",
+    "expression": "(s+5)^2*(s^2+25)",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-5",
+    "group": "epsilon",
+    "expression": "s^3+5*s+1",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-5",
+    "group": "zero-row",
+    "expression": "s^4-625",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-5",
+    "group": "origin",
+    "expression": "s*(s+5)^2",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-5",
+    "group": "negative",
+    "expression": "-(s+5)*(s+6)",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-5",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "stable-6",
+    "group": "stable",
+    "expression": "(s+6)^2*(s+7)",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-6",
+    "group": "rhp",
+    "expression": "(s-6)*(s+7)",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-6",
+    "group": "boundary",
+    "expression": "(s+6)*(s^2+36)",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-6",
+    "group": "repeated-axis",
+    "expression": "(s^2+36)^2",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-6",
+    "group": "mixed",
+    "expression": "(s+6)^2*(s^2+36)",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-6",
+    "group": "epsilon",
+    "expression": "s^3+6*s+1",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-6",
+    "group": "zero-row",
+    "expression": "s^4-1296",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-6",
+    "group": "origin",
+    "expression": "s*(s+6)^2",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-6",
+    "group": "negative",
+    "expression": "-(s+6)*(s+7)",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-6",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "stable-7",
+    "group": "stable",
+    "expression": "(s+7)^2*(s+8)",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-7",
+    "group": "rhp",
+    "expression": "(s-7)*(s+8)",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-7",
+    "group": "boundary",
+    "expression": "(s+7)*(s^2+49)",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-7",
+    "group": "repeated-axis",
+    "expression": "(s^2+49)^2",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-7",
+    "group": "mixed",
+    "expression": "(s+7)^2*(s^2+49)",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-7",
+    "group": "epsilon",
+    "expression": "s^3+7*s+1",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-7",
+    "group": "zero-row",
+    "expression": "s^4-2401",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-7",
+    "group": "origin",
+    "expression": "s*(s+7)^2",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-7",
+    "group": "negative",
+    "expression": "-(s+7)*(s+8)",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-7",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "stable-8",
+    "group": "stable",
+    "expression": "(s+8)^2*(s+9)",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-8",
+    "group": "rhp",
+    "expression": "(s-8)*(s+9)",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-8",
+    "group": "boundary",
+    "expression": "(s+8)*(s^2+64)",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-8",
+    "group": "repeated-axis",
+    "expression": "(s^2+64)^2",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-8",
+    "group": "mixed",
+    "expression": "(s+8)^2*(s^2+64)",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-8",
+    "group": "epsilon",
+    "expression": "s^3+8*s+1",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-8",
+    "group": "zero-row",
+    "expression": "s^4-4096",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-8",
+    "group": "origin",
+    "expression": "s*(s+8)^2",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-8",
+    "group": "negative",
+    "expression": "-(s+8)*(s+9)",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-8",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "stable-9",
+    "group": "stable",
+    "expression": "(s+9)^2*(s+10)",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-9",
+    "group": "rhp",
+    "expression": "(s-9)*(s+10)",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-9",
+    "group": "boundary",
+    "expression": "(s+9)*(s^2+81)",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-9",
+    "group": "repeated-axis",
+    "expression": "(s^2+81)^2",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-9",
+    "group": "mixed",
+    "expression": "(s+9)^2*(s^2+81)",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-9",
+    "group": "epsilon",
+    "expression": "s^3+9*s+1",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-9",
+    "group": "zero-row",
+    "expression": "s^4-6561",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-9",
+    "group": "origin",
+    "expression": "s*(s+9)^2",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-9",
+    "group": "negative",
+    "expression": "-(s+9)*(s+10)",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-9",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "stable-10",
+    "group": "stable",
+    "expression": "(s+10)^2*(s+11)",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "rhp-10",
+    "group": "rhp",
+    "expression": "(s-10)*(s+11)",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "boundary-10",
+    "group": "boundary",
+    "expression": "(s+10)*(s^2+100)",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-axis-10",
+    "group": "repeated-axis",
+    "expression": "(s^2+100)^2",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "mixed-10",
+    "group": "mixed",
+    "expression": "(s+10)^2*(s^2+100)",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "epsilon-10",
+    "group": "epsilon",
+    "expression": "s^3+10*s+1",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "zero-row-10",
+    "group": "zero-row",
+    "expression": "s^4-10000",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 1
+  },
+  {
+    "id": "origin-10",
+    "group": "origin",
+    "expression": "s*(s+10)^2",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0
+  },
+  {
+    "id": "negative-10",
+    "group": "negative",
+    "expression": "-(s+10)*(s+11)",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "gain-10",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 2
+  },
+  {
+    "id": "repeated-origin-1",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+1)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-1",
+    "group": "constant",
+    "expression": "1",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-2",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+2)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-2",
+    "group": "constant",
+    "expression": "2",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-3",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+3)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-3",
+    "group": "constant",
+    "expression": "3",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-4",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+4)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-4",
+    "group": "constant",
+    "expression": "4",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-5",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+5)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-5",
+    "group": "constant",
+    "expression": "5",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-6",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+6)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-6",
+    "group": "constant",
+    "expression": "6",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-7",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+7)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-7",
+    "group": "constant",
+    "expression": "7",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-8",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+8)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-8",
+    "group": "constant",
+    "expression": "8",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-9",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+9)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-9",
+    "group": "constant",
+    "expression": "9",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "repeated-origin-10",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+10)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0
+  },
+  {
+    "id": "constant-10",
+    "group": "constant",
+    "expression": "10",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-1",
+    "group": "degree-change",
+    "expression": "(K-1)*s^2+s+1",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-2",
+    "group": "degree-change",
+    "expression": "(K-2)*s^2+s+1",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-3",
+    "group": "degree-change",
+    "expression": "(K-3)*s^2+s+1",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-4",
+    "group": "degree-change",
+    "expression": "(K-4)*s^2+s+1",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-5",
+    "group": "degree-change",
+    "expression": "(K-5)*s^2+s+1",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-6",
+    "group": "degree-change",
+    "expression": "(K-6)*s^2+s+1",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-7",
+    "group": "degree-change",
+    "expression": "(K-7)*s^2+s+1",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-8",
+    "group": "degree-change",
+    "expression": "(K-8)*s^2+s+1",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-9",
+    "group": "degree-change",
+    "expression": "(K-9)*s^2+s+1",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0
+  },
+  {
+    "id": "degree-change-10",
+    "group": "degree-change",
+    "expression": "(K-10)*s^2+s+1",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0
+  }
+]

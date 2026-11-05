@@ -1,0 +1,3992 @@
+[
+  {
+    "id": "stable-1",
+    "group": "stable",
+    "expression": "(s+1)^2*(s+2)",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "5"
+        ],
+        [
+          "4",
+          "2"
+        ],
+        [
+          "9/2",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-1",
+    "group": "rhp",
+    "expression": "(s-1)*(s+2)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-2"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-2",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-1",
+    "group": "boundary",
+    "expression": "(s+1)*(s^2+1)",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "1"
+        ],
+        [
+          "1",
+          "1"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-1",
+    "group": "repeated-axis",
+    "expression": "(s^2+1)^2",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "2",
+          "1"
+        ],
+        [
+          "4",
+          "4",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-1",
+    "group": "mixed",
+    "expression": "(s+1)^2*(s^2+1)",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "2",
+          "1"
+        ],
+        [
+          "2",
+          "2",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-1",
+    "group": "epsilon",
+    "expression": "s^3+1*s+1",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "1"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-1",
+    "group": "zero-row",
+    "expression": "s^4-1",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-1"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-1",
+          "0"
+        ],
+        [
+          "4/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-1",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-1",
+    "group": "origin",
+    "expression": "s*(s+1)^2",
+    "k": 1,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "1"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-1",
+    "group": "negative",
+    "expression": "-(s+1)*(s+2)",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-2"
+        ],
+        [
+          "-3",
+          "0"
+        ],
+        [
+          "-2",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-1",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "1"
+        ],
+        [
+          "5/2",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-2",
+    "group": "stable",
+    "expression": "(s+2)^2*(s+3)",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "16"
+        ],
+        [
+          "7",
+          "12"
+        ],
+        [
+          "100/7",
+          "0"
+        ],
+        [
+          "12",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-2",
+    "group": "rhp",
+    "expression": "(s-2)*(s+3)",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-6"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-6",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-2",
+    "group": "boundary",
+    "expression": "(s+2)*(s^2+4)",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "4"
+        ],
+        [
+          "2",
+          "8"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "8",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-2",
+    "group": "repeated-axis",
+    "expression": "(s^2+4)^2",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "8",
+          "16"
+        ],
+        [
+          "4",
+          "16",
+          "0"
+        ],
+        [
+          "4",
+          "16",
+          "0"
+        ],
+        [
+          "8",
+          "0",
+          "0"
+        ],
+        [
+          "16",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-2",
+    "group": "mixed",
+    "expression": "(s+2)^2*(s^2+4)",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "8",
+          "16"
+        ],
+        [
+          "4",
+          "16",
+          "0"
+        ],
+        [
+          "4",
+          "16",
+          "0"
+        ],
+        [
+          "8",
+          "0",
+          "0"
+        ],
+        [
+          "16",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-2",
+    "group": "epsilon",
+    "expression": "s^3+2*s+1",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "2"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(2*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-2",
+    "group": "zero-row",
+    "expression": "s^4-16",
+    "k": 2,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-16"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-16",
+          "0"
+        ],
+        [
+          "64/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-16",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-2",
+    "group": "origin",
+    "expression": "s*(s+2)^2",
+    "k": 2,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "4"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-2",
+    "group": "negative",
+    "expression": "-(s+2)*(s+3)",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-6"
+        ],
+        [
+          "-5",
+          "0"
+        ],
+        [
+          "-6",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-2",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "2"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-3",
+    "group": "stable",
+    "expression": "(s+3)^2*(s+4)",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "33"
+        ],
+        [
+          "10",
+          "36"
+        ],
+        [
+          "147/5",
+          "0"
+        ],
+        [
+          "36",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-3",
+    "group": "rhp",
+    "expression": "(s-3)*(s+4)",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-12"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-12",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-3",
+    "group": "boundary",
+    "expression": "(s+3)*(s^2+9)",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "9"
+        ],
+        [
+          "3",
+          "27"
+        ],
+        [
+          "6",
+          "0"
+        ],
+        [
+          "27",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-3",
+    "group": "repeated-axis",
+    "expression": "(s^2+9)^2",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "18",
+          "81"
+        ],
+        [
+          "4",
+          "36",
+          "0"
+        ],
+        [
+          "9",
+          "81",
+          "0"
+        ],
+        [
+          "18",
+          "0",
+          "0"
+        ],
+        [
+          "81",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-3",
+    "group": "mixed",
+    "expression": "(s+3)^2*(s^2+9)",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "18",
+          "81"
+        ],
+        [
+          "6",
+          "54",
+          "0"
+        ],
+        [
+          "9",
+          "81",
+          "0"
+        ],
+        [
+          "18",
+          "0",
+          "0"
+        ],
+        [
+          "81",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-3",
+    "group": "epsilon",
+    "expression": "s^3+3*s+1",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(3*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-3",
+    "group": "zero-row",
+    "expression": "s^4-81",
+    "k": 3,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-81"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-81",
+          "0"
+        ],
+        [
+          "324/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-81",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-3",
+    "group": "origin",
+    "expression": "s*(s+3)^2",
+    "k": 3,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "9"
+        ],
+        [
+          "6",
+          "0"
+        ],
+        [
+          "9",
+          "0"
+        ],
+        [
+          "9",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-3",
+    "group": "negative",
+    "expression": "-(s+3)*(s+4)",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-12"
+        ],
+        [
+          "-7",
+          "0"
+        ],
+        [
+          "-12",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-3",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "3"
+        ],
+        [
+          "3/2",
+          "0"
+        ],
+        [
+          "3",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-4",
+    "group": "stable",
+    "expression": "(s+4)^2*(s+5)",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "56"
+        ],
+        [
+          "13",
+          "80"
+        ],
+        [
+          "648/13",
+          "0"
+        ],
+        [
+          "80",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-4",
+    "group": "rhp",
+    "expression": "(s-4)*(s+5)",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-20"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-20",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-4",
+    "group": "boundary",
+    "expression": "(s+4)*(s^2+16)",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "16"
+        ],
+        [
+          "4",
+          "64"
+        ],
+        [
+          "8",
+          "0"
+        ],
+        [
+          "64",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-4",
+    "group": "repeated-axis",
+    "expression": "(s^2+16)^2",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "32",
+          "256"
+        ],
+        [
+          "4",
+          "64",
+          "0"
+        ],
+        [
+          "16",
+          "256",
+          "0"
+        ],
+        [
+          "32",
+          "0",
+          "0"
+        ],
+        [
+          "256",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-4",
+    "group": "mixed",
+    "expression": "(s+4)^2*(s^2+16)",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "32",
+          "256"
+        ],
+        [
+          "8",
+          "128",
+          "0"
+        ],
+        [
+          "16",
+          "256",
+          "0"
+        ],
+        [
+          "32",
+          "0",
+          "0"
+        ],
+        [
+          "256",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-4",
+    "group": "epsilon",
+    "expression": "s^3+4*s+1",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "4"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(4*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-4",
+    "group": "zero-row",
+    "expression": "s^4-256",
+    "k": 4,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-256"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-256",
+          "0"
+        ],
+        [
+          "1024/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-256",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-4",
+    "group": "origin",
+    "expression": "s*(s+4)^2",
+    "k": 4,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "16"
+        ],
+        [
+          "8",
+          "0"
+        ],
+        [
+          "16",
+          "0"
+        ],
+        [
+          "16",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-4",
+    "group": "negative",
+    "expression": "-(s+4)*(s+5)",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-20"
+        ],
+        [
+          "-9",
+          "0"
+        ],
+        [
+          "-20",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-4",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "4"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-5",
+    "group": "stable",
+    "expression": "(s+5)^2*(s+6)",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "85"
+        ],
+        [
+          "16",
+          "150"
+        ],
+        [
+          "605/8",
+          "0"
+        ],
+        [
+          "150",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-5",
+    "group": "rhp",
+    "expression": "(s-5)*(s+6)",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-30"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-30",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-5",
+    "group": "boundary",
+    "expression": "(s+5)*(s^2+25)",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "25"
+        ],
+        [
+          "5",
+          "125"
+        ],
+        [
+          "10",
+          "0"
+        ],
+        [
+          "125",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-5",
+    "group": "repeated-axis",
+    "expression": "(s^2+25)^2",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "50",
+          "625"
+        ],
+        [
+          "4",
+          "100",
+          "0"
+        ],
+        [
+          "25",
+          "625",
+          "0"
+        ],
+        [
+          "50",
+          "0",
+          "0"
+        ],
+        [
+          "625",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-5",
+    "group": "mixed",
+    "expression": "(s+5)^2*(s^2+25)",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "50",
+          "625"
+        ],
+        [
+          "10",
+          "250",
+          "0"
+        ],
+        [
+          "25",
+          "625",
+          "0"
+        ],
+        [
+          "50",
+          "0",
+          "0"
+        ],
+        [
+          "625",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-5",
+    "group": "epsilon",
+    "expression": "s^3+5*s+1",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "5"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(5*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-5",
+    "group": "zero-row",
+    "expression": "s^4-625",
+    "k": 5,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-625"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-625",
+          "0"
+        ],
+        [
+          "2500/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-625",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-5",
+    "group": "origin",
+    "expression": "s*(s+5)^2",
+    "k": 5,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "25"
+        ],
+        [
+          "10",
+          "0"
+        ],
+        [
+          "25",
+          "0"
+        ],
+        [
+          "25",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-5",
+    "group": "negative",
+    "expression": "-(s+5)*(s+6)",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-30"
+        ],
+        [
+          "-11",
+          "0"
+        ],
+        [
+          "-30",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-5",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "5"
+        ],
+        [
+          "1/2",
+          "0"
+        ],
+        [
+          "5",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-6",
+    "group": "stable",
+    "expression": "(s+6)^2*(s+7)",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "120"
+        ],
+        [
+          "19",
+          "252"
+        ],
+        [
+          "2028/19",
+          "0"
+        ],
+        [
+          "252",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-6",
+    "group": "rhp",
+    "expression": "(s-6)*(s+7)",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-42"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-42",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-6",
+    "group": "boundary",
+    "expression": "(s+6)*(s^2+36)",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "36"
+        ],
+        [
+          "6",
+          "216"
+        ],
+        [
+          "12",
+          "0"
+        ],
+        [
+          "216",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-6",
+    "group": "repeated-axis",
+    "expression": "(s^2+36)^2",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "72",
+          "1296"
+        ],
+        [
+          "4",
+          "144",
+          "0"
+        ],
+        [
+          "36",
+          "1296",
+          "0"
+        ],
+        [
+          "72",
+          "0",
+          "0"
+        ],
+        [
+          "1296",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-6",
+    "group": "mixed",
+    "expression": "(s+6)^2*(s^2+36)",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "72",
+          "1296"
+        ],
+        [
+          "12",
+          "432",
+          "0"
+        ],
+        [
+          "36",
+          "1296",
+          "0"
+        ],
+        [
+          "72",
+          "0",
+          "0"
+        ],
+        [
+          "1296",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-6",
+    "group": "epsilon",
+    "expression": "s^3+6*s+1",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "6"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(6*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-6",
+    "group": "zero-row",
+    "expression": "s^4-1296",
+    "k": 6,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-1296"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-1296",
+          "0"
+        ],
+        [
+          "5184/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-1296",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-6",
+    "group": "origin",
+    "expression": "s*(s+6)^2",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "36"
+        ],
+        [
+          "12",
+          "0"
+        ],
+        [
+          "36",
+          "0"
+        ],
+        [
+          "36",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-6",
+    "group": "negative",
+    "expression": "-(s+6)*(s+7)",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-42"
+        ],
+        [
+          "-13",
+          "0"
+        ],
+        [
+          "-42",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-6",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 6,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "6"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "6",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-7",
+    "group": "stable",
+    "expression": "(s+7)^2*(s+8)",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "161"
+        ],
+        [
+          "22",
+          "392"
+        ],
+        [
+          "1575/11",
+          "0"
+        ],
+        [
+          "392",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-7",
+    "group": "rhp",
+    "expression": "(s-7)*(s+8)",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-56"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-56",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-7",
+    "group": "boundary",
+    "expression": "(s+7)*(s^2+49)",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "49"
+        ],
+        [
+          "7",
+          "343"
+        ],
+        [
+          "14",
+          "0"
+        ],
+        [
+          "343",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-7",
+    "group": "repeated-axis",
+    "expression": "(s^2+49)^2",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "98",
+          "2401"
+        ],
+        [
+          "4",
+          "196",
+          "0"
+        ],
+        [
+          "49",
+          "2401",
+          "0"
+        ],
+        [
+          "98",
+          "0",
+          "0"
+        ],
+        [
+          "2401",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-7",
+    "group": "mixed",
+    "expression": "(s+7)^2*(s^2+49)",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "98",
+          "2401"
+        ],
+        [
+          "14",
+          "686",
+          "0"
+        ],
+        [
+          "49",
+          "2401",
+          "0"
+        ],
+        [
+          "98",
+          "0",
+          "0"
+        ],
+        [
+          "2401",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-7",
+    "group": "epsilon",
+    "expression": "s^3+7*s+1",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "7"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(7*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-7",
+    "group": "zero-row",
+    "expression": "s^4-2401",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-2401"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-2401",
+          "0"
+        ],
+        [
+          "9604/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-2401",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-7",
+    "group": "origin",
+    "expression": "s*(s+7)^2",
+    "k": 7,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "49"
+        ],
+        [
+          "14",
+          "0"
+        ],
+        [
+          "49",
+          "0"
+        ],
+        [
+          "49",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-7",
+    "group": "negative",
+    "expression": "-(s+7)*(s+8)",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-56"
+        ],
+        [
+          "-15",
+          "0"
+        ],
+        [
+          "-56",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-7",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 7,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "7"
+        ],
+        [
+          "-1/2",
+          "0"
+        ],
+        [
+          "7",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-8",
+    "group": "stable",
+    "expression": "(s+8)^2*(s+9)",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "208"
+        ],
+        [
+          "25",
+          "576"
+        ],
+        [
+          "4624/25",
+          "0"
+        ],
+        [
+          "576",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-8",
+    "group": "rhp",
+    "expression": "(s-8)*(s+9)",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-72"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-72",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-8",
+    "group": "boundary",
+    "expression": "(s+8)*(s^2+64)",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "64"
+        ],
+        [
+          "8",
+          "512"
+        ],
+        [
+          "16",
+          "0"
+        ],
+        [
+          "512",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-8",
+    "group": "repeated-axis",
+    "expression": "(s^2+64)^2",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "128",
+          "4096"
+        ],
+        [
+          "4",
+          "256",
+          "0"
+        ],
+        [
+          "64",
+          "4096",
+          "0"
+        ],
+        [
+          "128",
+          "0",
+          "0"
+        ],
+        [
+          "4096",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-8",
+    "group": "mixed",
+    "expression": "(s+8)^2*(s^2+64)",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "128",
+          "4096"
+        ],
+        [
+          "16",
+          "1024",
+          "0"
+        ],
+        [
+          "64",
+          "4096",
+          "0"
+        ],
+        [
+          "128",
+          "0",
+          "0"
+        ],
+        [
+          "4096",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-8",
+    "group": "epsilon",
+    "expression": "s^3+8*s+1",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "8"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(8*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-8",
+    "group": "zero-row",
+    "expression": "s^4-4096",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-4096"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-4096",
+          "0"
+        ],
+        [
+          "16384/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-4096",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-8",
+    "group": "origin",
+    "expression": "s*(s+8)^2",
+    "k": 8,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "64"
+        ],
+        [
+          "16",
+          "0"
+        ],
+        [
+          "64",
+          "0"
+        ],
+        [
+          "64",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-8",
+    "group": "negative",
+    "expression": "-(s+8)*(s+9)",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-72"
+        ],
+        [
+          "-17",
+          "0"
+        ],
+        [
+          "-72",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-8",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 8,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "8"
+        ],
+        [
+          "-1",
+          "0"
+        ],
+        [
+          "8",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-9",
+    "group": "stable",
+    "expression": "(s+9)^2*(s+10)",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "261"
+        ],
+        [
+          "28",
+          "810"
+        ],
+        [
+          "3249/14",
+          "0"
+        ],
+        [
+          "810",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-9",
+    "group": "rhp",
+    "expression": "(s-9)*(s+10)",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-90"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-90",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-9",
+    "group": "boundary",
+    "expression": "(s+9)*(s^2+81)",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "81"
+        ],
+        [
+          "9",
+          "729"
+        ],
+        [
+          "18",
+          "0"
+        ],
+        [
+          "729",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-9",
+    "group": "repeated-axis",
+    "expression": "(s^2+81)^2",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "162",
+          "6561"
+        ],
+        [
+          "4",
+          "324",
+          "0"
+        ],
+        [
+          "81",
+          "6561",
+          "0"
+        ],
+        [
+          "162",
+          "0",
+          "0"
+        ],
+        [
+          "6561",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-9",
+    "group": "mixed",
+    "expression": "(s+9)^2*(s^2+81)",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "162",
+          "6561"
+        ],
+        [
+          "18",
+          "1458",
+          "0"
+        ],
+        [
+          "81",
+          "6561",
+          "0"
+        ],
+        [
+          "162",
+          "0",
+          "0"
+        ],
+        [
+          "6561",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-9",
+    "group": "epsilon",
+    "expression": "s^3+9*s+1",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "9"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(9*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-9",
+    "group": "zero-row",
+    "expression": "s^4-6561",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-6561"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-6561",
+          "0"
+        ],
+        [
+          "26244/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-6561",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-9",
+    "group": "origin",
+    "expression": "s*(s+9)^2",
+    "k": 9,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "81"
+        ],
+        [
+          "18",
+          "0"
+        ],
+        [
+          "81",
+          "0"
+        ],
+        [
+          "81",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-9",
+    "group": "negative",
+    "expression": "-(s+9)*(s+10)",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-90"
+        ],
+        [
+          "-19",
+          "0"
+        ],
+        [
+          "-90",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-9",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 9,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "9"
+        ],
+        [
+          "-3/2",
+          "0"
+        ],
+        [
+          "9",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "stable-10",
+    "group": "stable",
+    "expression": "(s+10)^2*(s+11)",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "320"
+        ],
+        [
+          "31",
+          "1100"
+        ],
+        [
+          "8820/31",
+          "0"
+        ],
+        [
+          "1100",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "rhp-10",
+    "group": "rhp",
+    "expression": "(s-10)*(s+11)",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "-110"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "-110",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "boundary-10",
+    "group": "boundary",
+    "expression": "(s+10)*(s^2+100)",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "100"
+        ],
+        [
+          "10",
+          "1000"
+        ],
+        [
+          "20",
+          "0"
+        ],
+        [
+          "1000",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "repeated-axis-10",
+    "group": "repeated-axis",
+    "expression": "(s^2+100)^2",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "200",
+          "10000"
+        ],
+        [
+          "4",
+          "400",
+          "0"
+        ],
+        [
+          "100",
+          "10000",
+          "0"
+        ],
+        [
+          "200",
+          "0",
+          "0"
+        ],
+        [
+          "10000",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "mixed-10",
+    "group": "mixed",
+    "expression": "(s+10)^2*(s^2+100)",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "200",
+          "10000"
+        ],
+        [
+          "20",
+          "2000",
+          "0"
+        ],
+        [
+          "100",
+          "10000",
+          "0"
+        ],
+        [
+          "200",
+          "0",
+          "0"
+        ],
+        [
+          "10000",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "epsilon-10",
+    "group": "epsilon",
+    "expression": "s^3+10*s+1",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "10"
+        ],
+        [
+          "epsilon",
+          "1"
+        ],
+        [
+          "(10*epsilon - 1)/epsilon",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "zero-row-10",
+    "group": "zero-row",
+    "expression": "s^4-10000",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 1,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0",
+          "-10000"
+        ],
+        [
+          "4",
+          "0",
+          "0"
+        ],
+        [
+          "epsilon",
+          "-10000",
+          "0"
+        ],
+        [
+          "40000/epsilon",
+          "0",
+          "0"
+        ],
+        [
+          "-10000",
+          "0",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 1,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "origin-10",
+    "group": "origin",
+    "expression": "s*(s+10)^2",
+    "k": 10,
+    "status": "boundary",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "100"
+        ],
+        [
+          "20",
+          "0"
+        ],
+        [
+          "100",
+          "0"
+        ],
+        [
+          "100",
+          "0"
+        ]
+      ],
+      "status": "boundary",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "negative-10",
+    "group": "negative",
+    "expression": "-(s+10)*(s+11)",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "-1",
+          "-110"
+        ],
+        [
+          "-21",
+          "0"
+        ],
+        [
+          "-110",
+          "0"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "gain-10",
+    "group": "gain",
+    "expression": "s^3+2*s^2+3*s+K",
+    "k": 10,
+    "status": "unstable",
+    "rhp": 2,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "10"
+        ],
+        [
+          "-2",
+          "0"
+        ],
+        [
+          "10",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 2,
+      "intervals": "(0 < K) & (K < 6)"
+    }
+  },
+  {
+    "id": "repeated-origin-1",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+1)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-1",
+    "group": "constant",
+    "expression": "1",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-2",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+2)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-2",
+    "group": "constant",
+    "expression": "2",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "2"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-3",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+3)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "3",
+          "0"
+        ],
+        [
+          "6",
+          "0"
+        ],
+        [
+          "6",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-3",
+    "group": "constant",
+    "expression": "3",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "3"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-4",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+4)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "4",
+          "0"
+        ],
+        [
+          "8",
+          "0"
+        ],
+        [
+          "8",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-4",
+    "group": "constant",
+    "expression": "4",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "4"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-5",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+5)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "5",
+          "0"
+        ],
+        [
+          "10",
+          "0"
+        ],
+        [
+          "10",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-5",
+    "group": "constant",
+    "expression": "5",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "5"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-6",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+6)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "6",
+          "0"
+        ],
+        [
+          "12",
+          "0"
+        ],
+        [
+          "12",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-6",
+    "group": "constant",
+    "expression": "6",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "6"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-7",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+7)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "7",
+          "0"
+        ],
+        [
+          "14",
+          "0"
+        ],
+        [
+          "14",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-7",
+    "group": "constant",
+    "expression": "7",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "7"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-8",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+8)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "8",
+          "0"
+        ],
+        [
+          "16",
+          "0"
+        ],
+        [
+          "16",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-8",
+    "group": "constant",
+    "expression": "8",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "8"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-9",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+9)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "9",
+          "0"
+        ],
+        [
+          "18",
+          "0"
+        ],
+        [
+          "18",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-9",
+    "group": "constant",
+    "expression": "9",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "9"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "repeated-origin-10",
+    "group": "repeated-origin",
+    "expression": "s^2*(s+10)",
+    "k": 1,
+    "status": "unstable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "10",
+          "0"
+        ],
+        [
+          "20",
+          "0"
+        ],
+        [
+          "20",
+          "0"
+        ]
+      ],
+      "status": "unstable",
+      "changes": 0,
+      "intervals": "False"
+    }
+  },
+  {
+    "id": "constant-10",
+    "group": "constant",
+    "expression": "10",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "10"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "0 <= K"
+    }
+  },
+  {
+    "id": "degree-change-1",
+    "group": "degree-change",
+    "expression": "(K-1)*s^2+s+1",
+    "k": 1,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 1) | ((0 <= K) & (1 < K) & Ne(K, 1))"
+    }
+  },
+  {
+    "id": "degree-change-2",
+    "group": "degree-change",
+    "expression": "(K-2)*s^2+s+1",
+    "k": 2,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 2) | ((0 <= K) & (2 < K) & Ne(K, 2))"
+    }
+  },
+  {
+    "id": "degree-change-3",
+    "group": "degree-change",
+    "expression": "(K-3)*s^2+s+1",
+    "k": 3,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 3) | ((0 <= K) & (3 < K) & Ne(K, 3))"
+    }
+  },
+  {
+    "id": "degree-change-4",
+    "group": "degree-change",
+    "expression": "(K-4)*s^2+s+1",
+    "k": 4,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 4) | ((0 <= K) & (4 < K) & Ne(K, 4))"
+    }
+  },
+  {
+    "id": "degree-change-5",
+    "group": "degree-change",
+    "expression": "(K-5)*s^2+s+1",
+    "k": 5,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 5) | ((0 <= K) & (5 < K) & Ne(K, 5))"
+    }
+  },
+  {
+    "id": "degree-change-6",
+    "group": "degree-change",
+    "expression": "(K-6)*s^2+s+1",
+    "k": 6,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 6) | ((0 <= K) & (6 < K) & Ne(K, 6))"
+    }
+  },
+  {
+    "id": "degree-change-7",
+    "group": "degree-change",
+    "expression": "(K-7)*s^2+s+1",
+    "k": 7,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 7) | ((0 <= K) & (7 < K) & Ne(K, 7))"
+    }
+  },
+  {
+    "id": "degree-change-8",
+    "group": "degree-change",
+    "expression": "(K-8)*s^2+s+1",
+    "k": 8,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 8) | ((0 <= K) & (8 < K) & Ne(K, 8))"
+    }
+  },
+  {
+    "id": "degree-change-9",
+    "group": "degree-change",
+    "expression": "(K-9)*s^2+s+1",
+    "k": 9,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 9) | ((0 <= K) & (9 < K) & Ne(K, 9))"
+    }
+  },
+  {
+    "id": "degree-change-10",
+    "group": "degree-change",
+    "expression": "(K-10)*s^2+s+1",
+    "k": 10,
+    "status": "stable",
+    "rhp": 0,
+    "actual": {
+      "rows": [
+        [
+          "1"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "status": "stable",
+      "changes": 0,
+      "intervals": "Eq(K, 10) | ((0 <= K) & (10 < K) & Ne(K, 10))"
+    }
+  }
+]
