@@ -10,6 +10,7 @@ Aplicación local para explorar sistemas de control continuos LTI SISO. El naveg
 4. [API HTTP](API.md): métodos, entradas, respuestas y errores.
 5. [Validaciones](VALIDACIONES.md): reglas de entrada, matemáticas y persistencia.
 6. [Evidencia de verificación](VERIFICACION.md): resultados observados y límites de las mediciones.
+7. [Parcial de 20 ejercicios](PARCIAL_20_EJERCICIOS.md) con fichas por tema, cálculos de referencia y [plan de integración y QA](plan/PLAN_TUTOR_PARCIAL_20.md).
 
 El contrato de solicitudes exacto está exportado en [openapi.json](openapi.json). Los [ejemplos JSON](ejemplos/) fueron ejecutados contra la aplicación con TestClient y devolvieron HTTP 200. Las respuestas del análisis contienen cientos de muestras; su estructura se explica en API.md.
 
