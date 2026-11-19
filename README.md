@@ -16,6 +16,8 @@ Después de la preparación funciona sin conexión y no necesita Node para ejecu
 
 Para detenerla, presionar **Ctrl+C** en la ventana del lanzador. Si el puerto está ocupado, ejecutar `iniciar.cmd --port 8766`. Para iniciar sin abrir una pestaña: `iniciar.cmd --no-browser`.
 
+La vista **Tutor** incluye los 33 ejercicios de la carpeta. Guarda los intentos en el navegador. Para usarla desde el celular, conectá ambos dispositivos a la misma red, ejecutá `iniciar.cmd --lan` y abrí en el teléfono la dirección que muestra el lanzador.
+
 ## Modelo
 
 La ganancia de barrido K se aplica una sola vez: `L_K=K G₀ H` y `T_K=K G₀/(1+K G₀ H)`. En modo GH directo, conocer L no determina la transferencia original C/R; se requiere G/H o un supuesto explícito de realimentación unitaria.
@@ -32,7 +34,7 @@ npm.cmd --prefix frontend run build
 .\.venv\Scripts\python.exe launch.py --no-browser
 ```
 
-El núcleo vive en `backend/`; la interfaz en `frontend/`. La API se sirve únicamente en loopback. Las dependencias JavaScript se empaquetan localmente y las fuentes usan recursos del sistema.
+El núcleo vive en `backend/` y la interfaz en `frontend/`. El lanzador sirve la API en loopback por defecto. Las dependencias JavaScript se empaquetan localmente y las fuentes usan recursos del sistema.
 
 Para las pruebas de navegador, con Chrome instalado y el servidor abierto:
 

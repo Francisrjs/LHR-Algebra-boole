@@ -60,6 +60,7 @@ const output=path.join(__dirname,'artifacts'),base=process.env.CONTROLLAB_URL||'
   const blockSolve=page.waitForResponse(r=>r.url().endsWith('/api/block-diagram/solve'));
   await page.getByRole('button',{name:'Validar y calcular'}).click();
   assert.equal((await blockSolve).status(),200);
+  await page.getByText('Ver datos del cálculo',{exact:true}).click();
   await page.getByText('transferMatrix',{exact:false}).waitFor();
   assert.equal(await page.getByRole('alert').count(),0);
   await page.screenshot({path:path.join(output,'order8-bode.png'),fullPage:true});

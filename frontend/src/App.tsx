@@ -4,7 +4,7 @@ import BodeWorkspace from "./BodeWorkspace";
 import {factorColors,factorTraces,factorAnnotations} from "./bodePresentation";
 import BodeSummary from "./BodeSummary";
 import FormulaEditor from "./FormulaEditor";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { Data, Layout } from "plotly.js";
 import Chart, { exportChart } from "./Chart";
 import TransferFormula from "./TransferFormula";
@@ -19,6 +19,7 @@ import {
   type ChartView,
 } from "./types";
 const colors = ["#40d6e7", "#a293ff", "#f5be70", "#5ecab3", "#ea7f95"];
+const Tutor = lazy(() => import("./tutor/Tutor"));
 const views = [
  ["routh", "▦", "Estabilidad · Routh"],
   ["bode", "◫", "Diagrama de Bode"],
@@ -101,6 +102,13 @@ function Panel({
   );
 }
 export default function App() {
+  const [tutorOpen, setTutorOpenState] = useState(() => location.hash === "#tutor");
+  function setTutorOpen(open: boolean) {
+    setTutorOpenState(open);
+    if (open || location.hash === "#tutor") {
+      history.replaceState(null, "", open ? "#tutor" : location.pathname + location.search);
+    }
+  }
   const [p, setP] = useState<Project>(structuredClone(initial)),
     [result, setResult] = useState<Analysis | null>(null),
     [error, setError] = useState(""),
@@ -510,13 +518,14 @@ export default function App() {
         }))
       : [];
   return (
-    <div className="shell">
+    <div className={"shell" + (tutorOpen ? " tutor-shell" : "")}>
       <aside className="sidebar">
         <a
           className="brand"
           href="#"
           onClick={(e) => {
             e.preventDefault();
+            setTutorOpen(false);
             update({ view: "bode" });
           }}
         >
@@ -530,9 +539,11 @@ export default function App() {
         <nav>
           {views.map(([id, icon, label], i) => (
             <button
-              className={"navitem " + (p.view === id ? "active" : "")}
+              className={"navitem " + (!tutorOpen && p.view === id ? "active" : "")}
+              aria-label={label}
               key={id}
               onClick={() => {
+                setTutorOpen(false);
                 if (id === "plano" && p.view !== "plano")
                   resetModel.current = structuredClone(p);
                 update({ view: id });
@@ -543,21 +554,24 @@ export default function App() {
               <small>0{i + 1}</small>
             </button>
           ))}
+          <button className={"navitem " + (tutorOpen ? "active" : "")} aria-label="Tutor" aria-current={tutorOpen ? "page" : undefined} onClick={() => setTutorOpen(true)}>
+            <span className="navicon" aria-hidden="true">↗</span><span>Tutor</span>
+          </button>
         </nav>
         <div className="sectionlabel exampleslabel">EXPLORAR MODELOS</div>
-        <button className="example" onClick={() => example("lgr")}>
+        <button className="example" onClick={() => { setTutorOpen(false); example("lgr"); }}>
           <i />
           Ganancia crítica<small>Tres polos · K crítico = 12</small>
         </button>
-        <button className="example" onClick={() => example("feedback")}>
+        <button className="example" onClick={() => { setTutorOpen(false); example("feedback"); }}>
           <i />
           Ejemplo 3 · G y H<small>Realimentación no unitaria</small>
         </button>
-        <button className="example" onClick={() => example("step")}>
+        <button className="example" onClick={() => { setTutorOpen(false); example("step"); }}>
           <i />
           Respuesta al escalón<small>Ejercicio del resumen</small>
         </button>
-        <button className="example" onClick={() => example("param")}>
+        <button className="example" onClick={() => { setTutorOpen(false); example("param"); }}>
           <i />
           Segundo orden<small>Explorá ωn y ζ</small>
         </button>
@@ -566,7 +580,8 @@ export default function App() {
           <small>Sin servicios externos</small>
         </div>
       </aside>
-      <div className="workspace">
+      {tutorOpen && <div className="workspace"><Suspense fallback={<main>Cargando tutor…</main>}><Tutor /></Suspense></div>}
+      <div className="workspace" hidden={tutorOpen}>
         <header>
           <div className="breadcrumb">
             Laboratorio <span>/</span>{" "}
