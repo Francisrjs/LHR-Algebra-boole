@@ -112,6 +112,7 @@ export default function BodeGraph({
   }
   return (
     <>
+      <div className="tutor-visual-scroll">
       <svg
         className={onPick ? "tutor-graph tutor-pick" : "tutor-graph"}
         role="img"
@@ -176,6 +177,7 @@ export default function BodeGraph({
             />
           )}
       </svg>
+      </div>
       <ul className="tutor-legend" aria-label="Trazos confirmados">
         {layers
           .filter((layer) => layer.style !== "frequency")

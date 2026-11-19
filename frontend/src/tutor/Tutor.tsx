@@ -1,3 +1,5 @@
+import AnswerField from "./AnswerField";
+import GraphicPanel from "./GraphicPanel";
 import { useRef, useState } from "react";
 import BodeGraph from "./BodeGraph";
 import { bodeExercises } from "./bode";
@@ -133,6 +135,7 @@ export default function Tutor() {
   const step = attempt && steps[attempt.step];
   const exam = attempt?.mode === "Examen";
   const last = attempt?.log.at(-1);
+  const wrong = !exam && last?.outcome === "wrong" && last.step === attempt?.step && last.response === attempt?.draft;
   const axis =
     attempt?.axis ?? (step && /fase/i.test(step.concept) ? "phase" : "mag");
 
@@ -212,6 +215,7 @@ export default function Tutor() {
       }
     }
     change(next);
+    if (next.step === current.step) responseField.current?.focus();
   }
   function choosePoint(value: number) {
     if (!attempt) return;
@@ -228,7 +232,7 @@ export default function Tutor() {
       <main className="tutor">
         <header className="tutor-title">
           <h1>Tutor de Control Automático</h1>
-          <p>Elegí un ejercicio de la carpeta y resolvelo paso a paso.</p>
+          <p>Elegí un tema y un nivel para practicar los ejercicios del apunte.</p>
           {pending && (
             <button className="tutor-confirm" onClick={() => open(pending)}>
               Reanudar {pending.exercise} · {pending.mode}
@@ -473,42 +477,18 @@ export default function Tutor() {
                   submitCurrent(attempt.draft);
                 }}
               >
-                {choices ? (
-                  <fieldset>
-                    <legend>Elegí una respuesta</legend>
-                    {choices.map((choice) => (
-                      <label key={choice} className="tutor-option">
-                        <input
-                          type="radio"
-                          name="response"
-                          checked={attempt.draft === choice}
-                          onChange={() => change({ ...attempt, draft: choice })}
-                        />
-                        {choice}
-                      </label>
-                    ))}
-                  </fieldset>
-                ) : (
-                  <label>
-                    Tu respuesta
-                    <input
-                      ref={responseField}
-                      value={attempt.draft}
-                      onChange={(event) => {
-                        setPicked(undefined);
-                        change({ ...attempt, draft: event.target.value });
-                      }}
-                      autoComplete="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
-                      placeholder={
-                        typeof step.answer === "object"
-                          ? step.answer.unit || "Número o cálculo"
-                          : "Expresión"
-                      }
-                    />
-                  </label>
-                )}
+                <AnswerField
+                  step={step}
+                  value={attempt.draft}
+                  choices={choices}
+                  inputRef={responseField}
+                  focusError
+                  error={wrong ? "Revisá tu respuesta y probá otra vez. " + step.hint : undefined}
+                  onChange={(draft) => {
+                    setPicked(undefined);
+                    change({ ...attempt, draft });
+                  }}
+                />
                 {allowPick && (
                   <p className="tutor-help">
                     Tocá{" "}
@@ -546,12 +526,7 @@ export default function Tutor() {
               )}
               {!exam && (
                 <div aria-live="polite">
-                  {last?.outcome === "wrong" && last.step === attempt.step && (
-                    <p className="tutor-help">
-                      Revisá tu respuesta y probá otra vez. {step.hint}
-                    </p>
-                  )}
-                  {hintOpen && last?.outcome !== "wrong" && (
+                  {hintOpen && !wrong && (
                     <p className="tutor-help">{step.hint}</p>
                   )}
                 </div>
@@ -561,7 +536,7 @@ export default function Tutor() {
           {!step && exam && !attempt.complete && (
             <>
               <h2>Entregar examen</h2>
-              <p>Se guardaron {steps.length} respuestas.</p>
+              <p>Guardaste {steps.length} respuestas. Entregá el examen para ver la corrección.</p>
               <button
                 className="tutor-confirm"
                 onClick={() => change({ ...attempt, complete: true })}
@@ -585,7 +560,7 @@ export default function Tutor() {
                 </p>
               )}
               {!!errors.length && (
-                <p>Conceptos a repasar. {errors.join(", ")}.</p>
+                <p>Te conviene repasar {errors.join(", ")}.</p>
               )}
               {exercise.note && <p>{exercise.note}</p>}
               <div className="tutor-actions">
@@ -661,35 +636,21 @@ export default function Tutor() {
                       });
                     }}
                   >
-                    <label>
-                      Respuesta de repaso
-                      {reviewStep.choices ? (
-                        <select
-                          value={retry.draft}
-                          onChange={(event) =>
-                            setRetry({ draft: event.target.value })
-                          }
-                        >
-                          <option value="">Elegí</option>
-                          {reviewStep.choices.map((choice) => (
-                            <option key={choice}>{choice}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          value={retry.draft}
-                          onChange={(event) =>
-                            setRetry({ draft: event.target.value })
-                          }
-                        />
-                      )}
-                    </label>
+                    <AnswerField
+                      key={reviewStep.id}
+                      step={reviewStep}
+                      label="Respuesta de repaso"
+                      value={retry.draft}
+                      choices={reviewStep.choices}
+                      error={retry.verdict === false ? reviewStep.hint : undefined}
+                      onChange={(draft) => setRetry({ draft })}
+                    />
                     <button disabled={!retry.draft.trim()}>
                       Comprobar repaso
                     </button>
-                    {retry.verdict !== undefined && (
+                    {retry.verdict === true && (
                       <p role="status">
-                        {retry.verdict ? "Correcto" : reviewStep.hint}
+                        Correcto
                       </p>
                     )}
                   </form>
@@ -753,7 +714,7 @@ export default function Tutor() {
         </section>
 
         {(bode || (locus && !routhOnly) || cells || block) && (
-          <section className="tutor-card" aria-label="Construcción gráfica">
+          <GraphicPanel key={attempt.id}>
             {bode && (
               <>
                 {progress > 0 && (
@@ -859,7 +820,12 @@ export default function Tutor() {
                   cells={cells}
                   progress={progress}
                   currentStep={attempt.complete ? undefined : attempt.step}
-                  onSelect={() => responseField.current?.focus()}
+                  onSelect={() => {
+                    const dialog = document.querySelector<HTMLDialogElement>(".tutor-dialog[open]");
+                    dialog?.close();
+                    if (dialog) dialog.addEventListener("close", () => responseField.current?.focus(), { once: true });
+                    else responseField.current?.focus();
+                  }}
                 />
               )}
             {block && (
@@ -891,7 +857,7 @@ export default function Tutor() {
                 />
               </>
             )}
-          </section>
+          </GraphicPanel>
         )}
       </div>
     </main>

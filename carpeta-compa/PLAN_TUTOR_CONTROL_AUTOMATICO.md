@@ -245,3 +245,7 @@ Actualizar al término de cada fase. En «Evidencia» anotar fichas, pruebas o r
 | 8 · Seguimiento y aceptación | Software verificado | 394 pruebas Python y 52 de frontend, compilación, y las tres suites de navegador (`smoke`, `acceptance` y `tutor`). Pasaron persistencia, repaso, corrección al entregar y compatibilidad de proyectos. `--lan` respondió por la IPv4 de la PC. Queda pendiente la prueba en un teléfono físico. |
 
 La prueba del tutor se ejecuta junto con las regresiones mediante `npm.cmd --prefix e2e test`, con ControlLab iniciado. La suite deja capturas de 360 y 390 px en `e2e/artifacts/`.
+
+### TUTOR-UI-001 · Mejora de la interfaz
+
+Práctica y repaso comparten controles de respuesta adaptados al paso. Los visuales técnicos se pueden ampliar durante el intento. Consultá el [handoff de sesión](../docs/SESSION_HANDOFF.md#tutor-ui-001) para retomar la verificación.

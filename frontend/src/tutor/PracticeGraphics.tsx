@@ -77,6 +77,7 @@ export function LocusGraph({
 
   return (
     <>
+      <div className="tutor-visual-scroll">
       <svg
         viewBox="0 0 480 412"
         className={onPick ? "tutor-graph tutor-pick" : "tutor-graph"}
@@ -240,6 +241,7 @@ export function LocusGraph({
           )}
         </g>
       </svg>
+      </div>
       <ul className="tutor-legend" aria-label="Elementos confirmados">
         {layers.some((l) => l.kind === "pole") && <li>× Polo</li>}
         {layers.some((l) => l.kind === "zero") && <li>○ Cero</li>}

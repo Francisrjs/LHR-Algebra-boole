@@ -303,3 +303,110 @@ body:has(.tutor-shell) {
     grid-row: 1 / span 2;
   }
 }
+
+/* Shared Tutor surfaces and form states. */
+.tutor {
+  --tutor-surface: #182a32;
+  --tutor-field: #101c22;
+  --tutor-muted: #bfd0d0;
+  --tutor-error: #ffc1ac;
+  --tutor-space: 8px;
+}
+.tutor-card,
+.tutor-dialog {
+  background: var(--tutor-surface);
+}
+.tutor-answer {
+  display: grid;
+  gap: var(--tutor-space);
+  min-width: 0;
+}
+.tutor-answer > label {
+  font-weight: 600;
+}
+.tutor-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--tutor-space);
+}
+.tutor-input-row input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  font-size: max(16px, 1rem);
+}
+.tutor-unit,
+.tutor-format {
+  color: var(--tutor-muted);
+}
+.tutor-format,
+.tutor-answer .tutor-error {
+  margin: 0;
+}
+.tutor-answer .tutor-error {
+  color: var(--tutor-error);
+}
+.tutor-answer [aria-invalid="true"] {
+  border-color: var(--tutor-error);
+}
+.tutor-option:has(:checked) {
+  background: var(--tutor-field);
+  outline: 1px solid var(--tutor-gold);
+  border-radius: 6px;
+}
+.tutor-keypad {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+  gap: var(--tutor-space);
+}
+.tutor-keypad[hidden] {
+  display: none;
+}
+.tutor-preview {
+  padding: 8px 12px;
+  border-inline-start: 2px solid var(--tutor-line);
+  overflow-x: auto;
+  overflow-wrap: anywhere;
+}
+.tutor summary {
+  min-height: 44px;
+}
+.tutor-visual-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tutor-space);
+  margin-bottom: var(--tutor-space);
+}
+.tutor-visual-header h2 {
+  margin: 0;
+}
+.tutor-dialog {
+  color: var(--tutor-ink);
+  border: 1px solid var(--tutor-line);
+  border-radius: 9px;
+  width: min(960px, calc(100% - 24px));
+  max-height: 90dvh;
+  padding: clamp(10px, 3vw, 24px);
+  overscroll-behavior: contain;
+}
+.tutor-dialog::backdrop {
+  background: rgb(6 12 16 / 85%);
+}
+.tutor-dialog > button:first-child {
+  margin-bottom: var(--tutor-space);
+}
+.tutor-visual-scroll {
+  overflow-x: auto;
+}
+.tutor-dialog .tutor-visual-scroll > svg {
+  min-width: 480px;
+}
+.tutor .tutor-legend i[data-style="frequency"] {
+  border: 0;
+  width: 0;
+  height: 0;
+  border-inline: 4px solid transparent;
+  border-top: 7px solid currentColor;
+}

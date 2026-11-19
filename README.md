@@ -16,7 +16,7 @@ Después de la preparación funciona sin conexión y no necesita Node para ejecu
 
 Para detenerla, presionar **Ctrl+C** en la ventana del lanzador. Si el puerto está ocupado, ejecutar `iniciar.cmd --port 8766`. Para iniciar sin abrir una pestaña: `iniciar.cmd --no-browser`.
 
-La vista **Tutor** incluye los 33 ejercicios de la carpeta. Guarda los intentos en el navegador. Para usarla desde el celular, conectá ambos dispositivos a la misma red, ejecutá `iniciar.cmd --lan` y abrí en el teléfono la dirección que muestra el lanzador.
+La vista **Tutor** incluye los 33 ejercicios de la carpeta. Guarda los intentos en el navegador. Para usarla desde el celular, conectá ambos dispositivos a la misma red, ejecutá `iniciar.cmd --lan` y abrí en el teléfono la dirección que muestra el lanzador. Podés usar el teclado matemático y ampliar los gráficos durante la práctica. El seguimiento está en la [lista de features](docs/FEATURE_LIST.md) y el [handoff de sesión](docs/SESSION_HANDOFF.md).
 
 ## Modelo
 

@@ -49,6 +49,12 @@ async function run() {
     await button("Empezar B1").tap();
     assert.deepEqual(await layers(),[]);
     const first = await step();
+    await button("Mostrar teclado matemático").tap();
+    await input().fill("12");
+    await input().evaluate(field => field.setSelectionRange(1, 1));
+    await button("Insertar ,").tap();
+    assert.equal(await input().inputValue(), "1,2");
+    await button("Ocultar teclado matemático").tap();
     await answer("100");
     assert.equal(await step(),first);
     assert.match(await page.locator(".tutor-help").last().innerText(),/probá otra vez/);
@@ -62,13 +68,21 @@ async function run() {
     await answer("0 dB");
     assert.deepEqual(await layers(),["Ganancia"]);
     await advanceTo("Quiebre");
+    await button("Ampliar").tap();
+    await page.getByRole("dialog", {name:"Construcción gráfica ampliada"}).waitFor();
     const graph = page.getByRole("img",{name:"Magnitud en dB"});
     const xy = await graph.evaluate(el=>{
       const p = new DOMPoint(53+(465-53)*4/6,130).matrixTransform(el.getScreenCTM());
       const rect = el.getBoundingClientRect();
       return {x:p.x-rect.x,y:p.y-rect.y};
     });
+    await graph.evaluate((el, x) => {
+      const scroller = el.parentElement;
+      scroller.scrollLeft = Math.max(0, x - scroller.clientWidth / 2);
+    },xy.x);
     await graph.tap({position:xy});
+    await page.keyboard.press("Escape");
+    assert.equal(await button("Ampliar").evaluate(el=>el===document.activeElement),true);
     assert.ok(Math.abs(Math.log10(Number(await input().inputValue())/100))<.055);
     await button("Confirmar").tap();
     assert.match(await step(),/Pendiente/);
@@ -123,7 +137,7 @@ async function run() {
     await button("Empezar D15").tap();
     const diagram = page.getByRole("group",{name:/^Diagrama de bloques/});
     assert.match(await diagram.getAttribute("aria-label"),/nodo x a H1/);
-    await diagram.getByRole("button",{name:"Seleccionar G",exact:true}).tap();
+    await diagram.getByRole("button",{name:"Seleccionar G",exact:true}).press("Enter");
     await button("Confirmar").tap();
     await answer("H1*G*e1");
     await answer("G+H2");
@@ -135,6 +149,13 @@ async function run() {
 
     await button("← Índice").tap();
     await button("Empezar E3").tap();
+    await input().fill("10/(");
+    assert.equal(await page.getByLabel("Vista previa",{exact:true}).innerText(),"10/(");
+    for(const width of [768,1440,390]) {
+      await page.setViewportSize({width,height:844});
+      assert.equal(await noHorizontalOverflow(),true);
+      await page.screenshot({path:path.join(output,`tutor-laplace-${width}.png`)});
+    }
     for (const value of ["10/s","10/(s*(s+1)*(s+2))","5","-10","5","5*(1-exp(-t))^2","5","5"]) await answer(value);
     assert.match(await page.locator(".tutor-card").innerText(),/Completado sin ayuda/);
     assert.deepEqual(errors,[]);
