@@ -1,5 +1,7 @@
 # Verificación del MVP
 
+La verificación de las fichas P1.1 a P4.5 se registra en el [informe de QA del parcial](QA_TUTOR_PARCIAL_20.md).
+
 Fecha local: 31 de octubre de 2026.
 
 Se ejecutaron las suites `e2e/smoke.cjs` y `e2e/acceptance.cjs` con Chrome en modo headless, ventana de 1600 × 1000 y recursos servidos desde el lanzador Python local. Las solicitudes a hosts externos se bloquearon durante ambas suites. No hubo solicitudes externas ni excepciones JavaScript.

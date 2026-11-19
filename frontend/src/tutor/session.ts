@@ -25,17 +25,18 @@ export type Step = {
 export function display(answer: Step["answer"]) {
   if (typeof answer === "string") return answer;
   return [
-    Number(answer.value.toPrecision(6)).toString().replace(".", ","),
+    Number(answer.value.toPrecision(answer.tolerance === undefined ? 10 : 6)).toString().replace(".", ","),
     answer.unit,
   ]
     .filter(Boolean)
     .join(" ");
 }
 
-function numberResponse(input: string, answer: Numeric) {
+export function numberParts(input: string, answer: Numeric) {
   const expected = (answer.unit ?? "").toLowerCase();
   const units = [
     expected,
+    ...(expected === "db/década" ? ["db/dc", "db/dec", "db/decada"] : []),
     ...(expected === "rad/s"
       ? ["hz"]
       : expected === "°"
@@ -44,7 +45,12 @@ function numberResponse(input: string, answer: Numeric) {
   ].filter(Boolean);
   const source = input.toLowerCase().replace(/\s+/g, "");
   const unit = units.find((u) => source.endsWith(u)) ?? "";
-  const value = scalar(unit ? source.slice(0, -unit.length) : source);
+  return { expression: unit ? source.slice(0, -unit.length) : source, unit };
+}
+
+function numberResponse(input: string, answer: Numeric) {
+  const { expression, unit } = numberParts(input, answer);
+  const value = scalar(expression);
   return (
     value * (unit === "hz" ? 2 * Math.PI : unit === "rad" ? 180 / Math.PI : 1)
   );
@@ -97,6 +103,7 @@ export type Submission = {
   outcome: "correct" | "wrong" | "assisted" | "exam";
 };
 export type Attempt = {
+  revealedStep?: string;
   id: string;
   exercise: string;
   mode: Mode;
@@ -165,6 +172,7 @@ export function submit(
   return {
     ...attempt,
     step,
+    revealedStep: undefined,
     log: [...attempt.log, { step: attempt.step, response, outcome }],
     draft: outcome === "wrong" ? response : "",
     complete: step === steps.length && attempt.mode !== "Examen",

@@ -1,1 +1,1 @@
-{"name":"controllab-browser-qa","private":true,"scripts":{"test":"node smoke.cjs && node acceptance.cjs && node tutor.cjs","performance":"node performance.cjs"},"devDependencies":{"playwright":"^1.58.0"}}
+{"name":"controllab-browser-qa","private":true,"scripts":{"test":"node smoke.cjs && node acceptance.cjs && node tutor.cjs && node tutor-partial.cjs","test:partial":"node tutor-partial.cjs","performance":"node performance.cjs"},"devDependencies":{"playwright":"^1.58.0"}}

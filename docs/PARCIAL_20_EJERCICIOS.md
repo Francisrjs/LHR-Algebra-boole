@@ -1,6 +1,6 @@
 # Cuaderno docente del parcial de 20 ejercicios
 
-Usar este cuaderno para preparar consignas, pistas y pruebas del Tutor de Control Automático. Los códigos P1.1 a P4.5 son los identificadores propuestos para la aplicación. La parte numérica reproduce la numeración de la guía. Las páginas se cuentan desde 1. El alumno debe poder comenzar cada ejercicio con el enunciado y los datos de entrada, aunque la fuente impresa muestre también la solución. [PDF original, siete páginas](libro/Parcial_Practica_20_Ejercicios_Con_Graficos.pdf) · [Plan de integración y QA](plan/PLAN_TUTOR_PARCIAL_20.md)
+Las fichas P1.1 a P4.5 se encuentran en «Práctica tipo parcial» dentro del tema correspondiente. La parte numérica reproduce la numeración de la guía y las páginas se cuentan desde 1. El alumno empieza con el enunciado y los datos de entrada. [PDF original, siete páginas](libro/Parcial_Practica_20_Ejercicios_Con_Graficos.pdf) · [Plan con los 20 ejercicios](plan/PLAN_TUTOR_PARCIAL_20.md#los-20-ejercicios-del-parcial)
 
 ## Álgebra de bloques
 
@@ -59,3 +59,131 @@ Usar 1+KGH=0 con K>0. Pedir polos y ceros con multiplicidad, segmentos reales, c
 Durante la preparación se cotejaron los cinco cierres de bloques y las cinco respuestas temporales con SymPy. Se evaluó L(jω) y se buscaron cambios de signo de |L|−1 y de Im(L) para las cinco fichas de Bode, filtrando el semieje negativo para MG. Se calcularon los polos de D+N y los candidatos reales de ruptura de las cinco fichas LGR. Estos controles fundamentan las referencias del plan. La verificación de las gráficas interactivas, los correctores y la persistencia corresponde a la implementación.
 
 Cada ficha implementada debe enlazar a su ID, identificar el método de comprobación y declarar unidad y tolerancia. Conservar precisión interna al corregir. En el solucionario, distinguir valores exactos, lecturas aproximadas y convenciones de signo.
+
+## Criterios de corrección en la aplicación
+
+- Bloques y Laplace. Comparación numérica de expresiones equivalentes en nueve muestras, con un mínimo de cinco valores de referencia finitos y tolerancia de 10⁻⁸ escalada. Los errores estacionarios son escalares en las unidades de la señal de entrada.
+- Bode. Cruces por rectas ±0,065 décadas y márgenes ±2 dB o grados. Cruces exactos ±0,005 décadas y márgenes ±0,15 dB o grados. Acepta conversiones de Hz a rad/s y de radianes a grados. MG infinito se contesta como opción y no tiene marcador finito.
+- Routh y LGR. Extremos y centroide ±0,01 en posición s, ángulos ±0,5°, rupturas ±0,025 en posición s, ganancia de ruptura ±0,005 y frecuencia de cruce ±0,01 rad/s. El intervalo estable se comprueba con la primera columna simbólica.
+
+## Fichas y pistas
+
+### P1.1
+
+Toma X, signo negativo, cierre interno, serie y cierre exterior (pasos 1–5). **Pista.** En Σ2 vuelve X, ubicada antes del segundo bloque. **Error típico.** Usar C en el lazo interno.
+
+Los identificadores de paso comienzan con `P1.1.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p11)
+
+### P1.2
+
+Signo positivo, cierre interno, serie y cierre exterior (pasos 1–4). **Pista.** El retorno unitario llega al terminal + de Σ2. **Error típico.** Perder el signo del bloque −2 o usar 1+G en el retorno positivo.
+
+Los identificadores de paso comienzan con `P1.2.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p12)
+
+### P1.3
+
+Paralelo, producto en serie y cierre exterior (pasos 1–3). **Pista.** Ambas ramas reciben B y entran al segundo sumador por terminales positivos. **Error típico.** Multiplicar las dos ramas paralelas.
+
+Los identificadores de paso comienzan con `P1.3.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p13)
+
+### P1.4
+
+Serie interna, cierre interno, serie exterior y cierre exterior (pasos 1–4). **Pista.** La ganancia 6 está antes del sumador interno. **Error típico.** Incluir 6 en el cálculo del lazo interior.
+
+Los identificadores de paso comienzan con `P1.4.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p14)
+
+### P1.5
+
+Toma Y, primer cierre, segundo cierre, serie y cierre exterior (pasos 1–5). **Pista.** Seguir el retorno que entra a Σ3 hasta la salida de 3/(s+1). **Error típico.** Mover el retorno de Σ3 a la salida de 2/s.
+
+Los identificadores de paso comienzan con `P1.5.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p15)
+
+### P2.1
+
+R(s), C(s), fracciones, c(t), polos de sE(s) y error (pasos 1–6). **Pista.** Calcular residuos en 0, −2 y −3. **Error típico.** Conservar el origen entre los polos de sE(s).
+
+Los identificadores de paso comienzan con `P2.1.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p21)
+
+### P2.2
+
+R(s), C(s), fracciones, término repetido, c(t), polos de sE(s) y error (pasos 1–7). **Pista.** Incluir las potencias 1 y 2 de s+3. **Error típico.** Omitir el factor t del término repetido.
+
+Los identificadores de paso comienzan con `P2.2.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p22)
+
+### P2.3
+
+R(s), C(s), fracciones, c(t), polos de sE(s) y error (pasos 1–6). **Pista.** Completar el cuadrado y ajustar el numerador del seno a 3. **Error típico.** Omitir el factor 2/3 del seno.
+
+Los identificadores de paso comienzan con `P2.3.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p23)
+
+### P2.4
+
+R(s), C(s), fracciones, c(t), polos de sE(s) y error (pasos 1–6). **Pista.** Formar la diferencia antes de tomar el límite. **Error típico.** Evaluar por separado los límites infinitos de entrada y salida.
+
+Los identificadores de paso comienzan con `P2.4.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p24)
+
+### P2.5
+
+T(s), R(s), C(s), fracciones, c(t), polos de sE(s), seguimiento y comparador (pasos 1–8). **Pista.** La señal de retorno es Hc y vale 4 en régimen permanente. **Error típico.** Usar −2 para el comparador o copiar el 1,2 del PDF.
+
+Los identificadores de paso comienzan con `P2.5.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p25)
+
+### P3.1
+
+Normalizar y construir tres factores de primer orden. **Pista.** Sumar las pendientes en 1, 10 y 100 rad/s. **Error típico.** Leer los dos márgenes a la misma frecuencia.
+
+Los identificadores de paso comienzan con `P3.1.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p31)
+
+### P3.2
+
+Incluir −90° del integrador desde el origen. **Pista.** Separar las frecuencias de cruce de fase y magnitud. **Error típico.** Cambiar de signo el MF negativo.
+
+Los identificadores de paso comienzan con `P3.2.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p32)
+
+### P3.3
+
+Registrar el cruce ascendente y el descendente. **Pista.** Buscar cambios de signo de la magnitud en los dos lados de la banda. **Error típico.** Inferir inestabilidad a partir de un único MF firmado.
+
+Los identificadores de paso comienzan con `P3.3.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p33)
+
+### P3.4
+
+Acumular los dos primeros efectos de polo. **Pista.** Los quiebres 1 y 2 rad/s tienen transiciones superpuestas. **Error típico.** Usar el cruce de 0 dB para leer el MG.
+
+Los identificadores de paso comienzan con `P3.4.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p34)
+
+### P3.5
+
+Identificar el factor cuadrático con ωn=1 y ζ=0,5. **Pista.** Evaluar solo el factor en s=j para obtener su contribución local. **Error típico.** Usar dos ceros reales o confundir el aporte con la respuesta de todo L.
+
+Los identificadores de paso comienzan con `P3.5.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p35)
+
+### P4.1
+
+Identificar tres polos simples y cerrar con D+K. **Pista.** Con K crítico la fila s¹ se anula y la fila s² da el auxiliar. **Error típico.** Aceptar el candidato que da K negativo.
+
+Los identificadores de paso comienzan con `P4.1.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p41)
+
+### P4.2
+
+Contar el polo y el cero dobles con multiplicidad. **Pista.** El conteo impar se conserva a ambos lados de un extremo doble. **Error típico.** Aceptar como ruptura interior el polo doble en K=0.
+
+Los identificadores de paso comienzan con `P4.2.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p42)
+
+### P4.3
+
+Resolver la ruptura real y armar Routh de orden dos. **Pista.** El discriminante de s²+6s+K se anula para K=9. **Error típico.** Confundir la raíz doble con pérdida de estabilidad.
+
+Los identificadores de paso comienzan con `P4.3.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p43)
+
+### P4.4
+
+Introducir ambas rupturas en orden de izquierda a derecha y usar Routh de orden cuatro. **Pista.** El candidato central queda fuera de los segmentos. En K=10 usar el auxiliar 10s²+10. **Error típico.** Descartar una ruptura porque tiene el mismo K que la otra.
+
+Los identificadores de paso comienzan con `P4.4.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p44)
+
+### P4.5
+
+Restar el cero −4 al sumar las posiciones para calcular el centroide. **Pista.** La primera columna da (6−K)/3 y en K=6 el auxiliar es 3s²+24. **Error típico.** Poner signo negativo al centroide o escribir jω en el campo de frecuencia.
+
+Los identificadores de paso comienzan con `P4.5.`. [Prueba del ejercicio](QA_TUTOR_PARCIAL_20.md#p45)

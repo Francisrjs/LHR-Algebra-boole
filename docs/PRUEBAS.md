@@ -57,6 +57,8 @@ npm.cmd --prefix e2e test
 npm.cmd --prefix e2e run performance
 ```
 
+El comando E2E incluye `tutor-partial.cjs`. Para ejecutar solo el recorrido de las 20 fichas, usar `npm.cmd --prefix e2e run test:partial`. [Informe de QA y evidencia](QA_TUTOR_PARCIAL_20.md)
+
 smoke.cjs verifica arrastre real/Deshacer, GH sin dobleK, navegación, JSON idéntico y PNG/SVG. acceptance.cjs comprueba álgebra/historial/rangos persistidos, último guardado, entrada inválida, tres señales, GH explícito y órdenes6/8. Bloquean recursos externos y reportan errores JavaScript. performance.cjs mide30 cambios de K en orden6 desde evento de edición hasta Plotly, incluido debounce. Artefactos: e2e/artifacts/. Un resultado de rendimiento depende de equipo/modelo, no garantiza todos los casos.
 
 La base por defecto es http://127.0.0.1:8765; las suites permiten CONTROLLAB_URL. Si Playwright no encuentra navegador, instalar Chrome o configurar CHROME_PATH; PLAYWRIGHT_MODULE permite indicar el módulo disponible en otro runtime.

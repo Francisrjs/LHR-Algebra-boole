@@ -1,7 +1,9 @@
+import { reductionLesson } from "./blockReductions";
 import {
   choose,
   expression,
   numeric,
+  partial,
   questions,
   type Exercise,
   type Question,
@@ -235,7 +237,7 @@ const d12 = wire(
 );
 const d12Final = "G1*G2/(1-G2+G1*G2)";
 
-export const blockExercises = [
+const originalBlockExercises = [
   lesson(
     "D1",
     "2 · penúltimo",
@@ -1036,6 +1038,133 @@ export const blockExercises = [
     },
   ),
 ];
+
+export const blockReductions = Object.fromEntries(originalBlockExercises.map(exercise => [exercise.id, reductionLesson(exercise)]));
+
+type ReturnPath = { take: string; sum: string; row: number; label?: string; positive?: boolean };
+
+function partialDiagram(path: Node[], returns: ReturnPath[], branches: Node[] = [], links: Edge[] = []) {
+  const nodes = [...path, ...branches];
+  const edges = chain(...path.map(([id]) => id.startsWith("Σ") ? "+" + id : id));
+  for (const { take, sum, row, label, positive } of returns) {
+    const source = nodes.find(([id]) => id === take)!;
+    const target = nodes.find(([id]) => id === sum)!;
+    const incoming = positive ? "+" : "−";
+    if (label) {
+      const id = "H" + row;
+      nodes.push([id, (source[1] + target[1]) / 2, row, label]);
+      edges.push(edge(take, id, undefined, [source[1], row]), edge(id, sum, incoming, [target[1], row]));
+    } else {
+      edges.push(edge(take, sum, incoming, [source[1], row], [target[1], row]));
+    }
+  }
+  return wire(nodes, [...edges, ...links]);
+}
+
+function forward(...blocks: string[]): Node[] {
+  const ids = blocks.map((label, index): Node => {
+    const column = index + 1;
+    if (label.startsWith(".")) return [label, column, 0, label.slice(1)];
+    return label.startsWith("Σ") ? [label, column, 0] : ["G" + column, column, 0, label];
+  });
+  return [["R", 0, 0], ...ids, ["C", ids.length + 1, 0]];
+}
+
+const inner: ReturnPath = { take: ".X", sum: "Σ2", row: 1 };
+const outer: ReturnPath = { take: ".C", sum: "Σ1", row: 3 };
+const closes = (label?: string) => ({ ...outer, label });
+const reducedStep = (prompt: string, answer: string, hint: string, explanation: string) =>
+  eq("Reducción local", prompt, answer, hint, explanation);
+const series = (answer: string) =>
+  reducedStep("Escribí el producto de la cadena directa del lazo exterior, antes de cerrarlo.", answer,
+    "Multiplicá los bloques que recorre la señal desde el sumador exterior hasta C.",
+    "En serie la salida de un bloque es la entrada del siguiente.");
+const loop = (name: string, answer: string, positive = false) =>
+  reducedStep(`Escribí el equivalente de ${name}.`, answer,
+    positive ? "El retorno positivo da Q/(1−QH)." : "El retorno negativo da Q/(1+QH).",
+    "El equivalente conserva la relación entre la entrada del sumador y la salida de la toma.");
+const snapshot = (stage: number, title: string, blocks: string[], label?: string) =>
+  ({ stage, title, diagram: partialDiagram(forward("Σ1", ...blocks, ".C"), [closes(label)]) });
+const partialBlockExercises = [
+  lesson("P1.1", "1",
+    partialDiagram(forward("Σ1", "Σ2", "4/(s+2)", ".X", "1/(s+5)", ".C"), [inner, closes("2")]),
+    [
+      select("¿De qué toma nace el retorno unitario a Σ2?", [".X", ".C"], 0,
+        "Seguí hacia atrás la flecha que entra por debajo de Σ2.",
+        "La toma X está entre 4/(s+2) y 1/(s+5)."),
+      sign("¿Con qué signo entra ese retorno en Σ2?", false, "La flecha llega a la entrada marcada −."),
+      loop("4/(s+2) y su retorno unitario", "4/(s+6)"),
+      series("4/((s+6)(s+5))"),
+      result("4/(s^2+11s+38)"),
+    ], { partial: partial("Lazos anidados"), transformed: [
+      snapshot(2, "Lazo interno reducido", ["4/(s+6)", "1/(s+5)"], "2"),
+      snapshot(3, "Serie reducida", ["4/[(s+6)(s+5)]"], "2"),
+    ] }),
+  lesson("P1.2", "1",
+    partialDiagram(forward("Σ1", "−2", "Σ2", "1/(s+4)", ".X", ".C"),
+      [{ ...inner, positive: true }, closes("1/(s+1)")]),
+    [
+      sign("¿Con qué signo entra el retorno unitario en Σ2?", true, "La toma X entra al terminal + de Σ2."),
+      loop("1/(s+4) en el lazo interno", "1/(s+3)", true),
+      series("-2/(s+3)"),
+      result("-2(s+1)/(s^2+4s+1)"),
+    ], { partial: partial("Retorno positivo"), transformed: [
+      snapshot(1, "Lazo positivo reducido", ["−2", "1/(s+3)"], "1/(s+1)"),
+      snapshot(2, "Serie con ganancia negativa", ["−2/(s+3)"], "1/(s+1)"),
+    ] }),
+  lesson("P1.3", "1",
+    partialDiagram([["R", 0, 0], ["Σ1", 1, 0], [".B", 2, 0, "B"]], [closes("s")],
+      [["A", 3, -1, "2/(s+1)"], ["B", 3, 1, "3/(s+1)"], ["Σ2", 4, 0],
+        ["G", 5, 0, "1/(s+2)"], [".C", 6, 0], ["C", 7, 0]], [
+        edge(".B", "A", undefined, [2, -1]), edge(".B", "B", undefined, [2, 1]),
+        edge("A", "Σ2", "+", [4, -1]), edge("B", "Σ2", "+", [4, 1]),
+        ...chain("Σ2", "G", ".C", "C"),
+      ]),
+    [
+      reducedStep("Escribí el equivalente del paralelo que entra en Σ2.", "5/(s+1)",
+        "Ambas ramas reciben B y entran con signo positivo.", "Las dos transferencias se suman."),
+      series("5/((s+1)(s+2))"),
+      result("5/(s^2+8s+2)"),
+    ], { partial: partial("Paralelo y retorno derivativo"), transformed: [
+      snapshot(0, "Paralelo reducido", ["5/(s+1)", "1/(s+2)"], "s"),
+      snapshot(1, "Serie reducida", ["5/[(s+1)(s+2)]"], "s"),
+    ] }),
+  lesson("P1.4", "1",
+    partialDiagram(forward("Σ1", "6", "Σ2", "1/(s+1)", "1/(s+2)", ".X", ".C"),
+      [{ ...inner, label: "3" }, closes("1/(s+3)")]),
+    [
+      reducedStep("Multiplicá los dos bloques comprendidos entre Σ2 y X.", "1/((s+1)(s+2))",
+        "La ganancia 6 queda antes de Σ2.", "Solo los bloques recorridos hasta X forman esta serie."),
+      loop("la serie interna con retorno 3", "1/(s^2+3s+5)"),
+      series("6/(s^2+3s+5)"),
+      result("6(s+3)/(s^3+6s^2+14s+21)"),
+    ], { partial: partial("Serie dentro del lazo"), transformed: [
+      { stage: 0, title: "Serie interna reducida", diagram:
+        partialDiagram(forward("Σ1", "6", "Σ2", "1/[(s+1)(s+2)]", ".X", ".C"),
+          [{ ...inner, label: "3" }, closes("1/(s+3)")]) },
+      snapshot(1, "Lazo interno reducido", ["6", "1/(s²+3s+5)"], "1/(s+3)"),
+      snapshot(2, "Serie exterior reducida", ["6/(s²+3s+5)"], "1/(s+3)"),
+    ] }),
+  lesson("P1.5", "2",
+    partialDiagram(forward("Σ1", "Σ2", "2/s", ".X", "Σ3", "3/(s+1)", ".Y", ".C"),
+      [inner, { take: ".Y", sum: "Σ3", row: 1 }, outer]),
+    [
+      select("¿Qué toma alimenta el retorno de Σ3?", [".X", ".Y", ".C"], 1,
+        "Seguí el retorno interior que vuelve a Σ3.", "Y es la toma inmediatamente posterior a 3/(s+1)."),
+      loop("2/s con su retorno unitario", "2/(s+2)"),
+      loop("3/(s+1) con su retorno unitario", "3/(s+4)"),
+      series("6/((s+2)(s+4))"),
+      result("6/(s^2+6s+14)"),
+    ], { partial: partial("Tres retornos unitarios"), transformed: [
+      { stage: 1, title: "Primer lazo reducido", diagram:
+        partialDiagram(forward("Σ1", "2/(s+2)", "Σ3", "3/(s+1)", ".Y", ".C"),
+          [{ take: ".Y", sum: "Σ3", row: 1 }, outer]) },
+      snapshot(2, "Ambos lazos internos reducidos", ["2/(s+2)", "3/(s+4)"]),
+      snapshot(3, "Serie exterior reducida", ["6/[(s+2)(s+4)]"]),
+    ] }),
+];
+
+export const blockExercises = [...originalBlockExercises, ...partialBlockExercises];
 
 export function finalDiagram(label: string, source: Diagram, prompt: string) {
   const transfer = prompt.match(/Escribí ([CY])\/([RDNU]) como/);

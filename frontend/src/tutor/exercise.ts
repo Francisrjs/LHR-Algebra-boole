@@ -13,7 +13,12 @@ export type Exercise = {
   prompt: string;
   steps: Step[];
   note?: string;
+  partial?: { title: string };
 };
+
+export function partial(title: string) {
+  return { title };
+}
 
 export type Question = Omit<Step, "id">;
 

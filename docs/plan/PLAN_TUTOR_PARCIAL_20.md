@@ -2,14 +2,41 @@
 
 **Encargo para el agente ejecutor.** Incorporar los 20 ejercicios del [cuaderno docente](../PARCIAL_20_EJERCICIOS.md) al Tutor de Control Automático, dentro de sus cuatro temas. El estudiante debe poder encontrarlos como ejercitación pendiente, resolverlos paso a paso, pedir ayuda y retomar su intento. Entregar fichas documentadas, evidencia de QA contra las promesas de este plan y la implementación verificada en `origin/main`.
 
-**Punto de partida.** Se inspeccionó el tutor en la revisión `91fd4d55`. Hay 33 ejercicios del manuscrito anterior y sesiones locales por ejercicio y modo. El nuevo parcial tiene 7 páginas, con cinco ejercicios en cada tema. El PDF incluido permite retomar la tarea desde otro equipo. SHA-256 de la fuente: `89595684797b26b5b678a8355f9be665e8ac4350520ff555e5829e8363a46385`. Las fichas docentes y los cálculos preliminares están preparados. Las fases de software y su QA quedan pendientes.
+**Punto de partida.** La revisión remota `02aed944a167900e32df2f0e53405ad9e70c3623` contiene 33 fichas del manuscrito. La base de trabajo incluye además B6, un ejemplo por contribuciones. El parcial tiene 7 páginas y cinco ejercicios en cada tema. El PDF tiene SHA-256 `89595684797b26b5b678a8355f9be665e8ac4350520ff555e5829e8363a46385`. El catálogo de trabajo resultante reúne 54 fichas. Consultar [resultados y pendientes](../QA_TUTOR_PARCIAL_20.md).
 
 | Tema visible en el tutor | IDs a incorporar | Páginas PDF | Total esperado en el tema, incluidos los originales |
 |---|---|---|---:|
 | Álgebra de bloques | P1.1–P1.5 | 1–2 | 20 |
 | Laplace y error estacionario | P2.1–P2.5 | 3 | 11 |
-| Bode directo | P3.1–P3.5 | 4–5 | 10 |
+| Bode directo | P3.1–P3.5 | 4–5 | 11 |
 | Routh y LGR | P4.1–P4.5 | 6–7 | 12 |
+
+## Los 20 ejercicios del parcial
+
+El identificador enlaza la ficha docente individual. Las frecuencias están en rad/s. Los valores de Bode corresponden a la respuesta exacta.
+
+| ID | Página | Práctica | Resultado de control |
+|---|---:|---|---|
+| [P1.1](../PARCIAL_20_EJERCICIOS.md#p11) | 1 | Lazo interno, serie y retorno exterior | 4/(s²+11s+38) |
+| [P1.2](../PARCIAL_20_EJERCICIOS.md#p12) | 1 | Retorno positivo y ganancia negativa | −2(s+1)/(s²+4s+1) |
+| [P1.3](../PARCIAL_20_EJERCICIOS.md#p13) | 1 | Paralelo y retorno derivativo | 5/(s²+8s+2) |
+| [P1.4](../PARCIAL_20_EJERCICIOS.md#p14) | 1 | Serie dentro del lazo interno | 6(s+3)/(s³+6s²+14s+21) |
+| [P1.5](../PARCIAL_20_EJERCICIOS.md#p15) | 2 | Dos cierres internos y retorno exterior | 6/(s²+6s+14) |
+| [P2.1](../PARCIAL_20_EJERCICIOS.md#p21) | 3 | Escalón y polos simples | c=10−30 exp(−2t)+20 exp(−3t), error 0 |
+| [P2.2](../PARCIAL_20_EJERCICIOS.md#p22) | 3 | Escalón y polo doble | c=4−(4+12t) exp(−3t), error 0 |
+| [P2.3](../PARCIAL_20_EJERCICIOS.md#p23) | 3 | Escalón y polos complejos | c=(50/13)[1−exp(−2t)(cos(3t)+(2/3)sen(3t))], error 15/13 |
+| [P2.4](../PARCIAL_20_EJERCICIOS.md#p24) | 3 | Rampa | c=2t−1+exp(−2t), error 1 |
+| [P2.5](../PARCIAL_20_EJERCICIOS.md#p25) | 3 | Retorno no unitario | c=8[1−exp(−6t)], seguimiento −2 y comparador +2 |
+| [P3.1](../PARCIAL_20_EJERCICIOS.md#p31) | 4 | Tres polos simples | MF +54,90° a 7,798 y MG +21,74 dB a 33,317. Estable. |
+| [P3.2](../PARCIAL_20_EJERCICIOS.md#p32) | 4 | Integrador y dos polos | MF −19,34° a 9,480 y MG −13,56 dB a 4,472. Inestable. |
+| [P3.3](../PARCIAL_20_EJERCICIOS.md#p33) | 4 | Dos cruces de magnitud | MF −21,88° a 0,32441 (ascendente) y +21,88° a 308,252 (descendente). MG infinito. Estable. |
+| [P3.4](../PARCIAL_20_EJERCICIOS.md#p34) | 4 | Polos cercanos | MF −62,87° a 26,518 y MG −34,07 dB a 5,657. Inestable. |
+| [P3.5](../PARCIAL_20_EJERCICIOS.md#p35) | 5 | Ceros complejos | MF +19,99° a 3083,373. MG infinito. Estable. A 1 rad/s el factor vale j. |
+| [P4.1](../PARCIAL_20_EJERCICIOS.md#p41) | 6 | Cruce imaginario | Ruptura −1,8453 a K≈3,0792. 0<K<192, ωc=√23. |
+| [P4.2](../PARCIAL_20_EJERCICIOS.md#p42) | 6 | Polo y cero dobles | Sin ruptura real interior. Todo K>0. |
+| [P4.3](../PARCIAL_20_EJERCICIOS.md#p43) | 6 | Ruptura de segundo orden | Ruptura −3 a K=9. Todo K>0. |
+| [P4.4](../PARCIAL_20_EJERCICIOS.md#p44) | 6 | Dos rupturas y tabla de orden cuatro | Rupturas −2,6180 y −0,3820 a K=1. 0<K<10, ωc=1. |
+| [P4.5](../PARCIAL_20_EJERCICIOS.md#p45) | 7 | Centroide positivo | Centroide +0,5. Ruptura −0,45474 a K≈0,10807. 0<K<6, ωc=√8. |
 
 ## Fase 0 · Preparar la base
 
@@ -58,7 +85,7 @@ Crear `docs/QA_TUTOR_PARCIAL_20.md` al implementar. Usar una fila por ID con tem
 
 | Promesa | Prueba que debe ejecutar QA | Criterio de aceptación |
 |---|---|---|
-| Cobertura y procedencia | Comparar un listado esperado independiente con el catálogo y el índice visible. Filtrar cada tema desde una sesión vacía. | 33 originales y 20 del parcial, 53 IDs únicos. En cada filtro aparecen cinco del parcial con página correcta, «Pendiente» y acción de inicio. |
+| Cobertura y procedencia | Comparar un listado esperado independiente con el catálogo y el índice visible. Filtrar cada tema desde una sesión vacía. | 33 originales, B6 y 20 del parcial, 54 IDs únicos. En cada filtro aparecen cinco del parcial con página correcta, «Pendiente» y acción de inicio. |
 | Resolución didáctica | Recorrer cada uno de los 20 IDs desde el índice hasta el resultado. Usar respuestas de referencia independientes de los objetos de la UI. En cada familia probar un error, pista y reintento. | Cada consigna permite deducir el siguiente paso. Error conserva paso y borrador. Acierto avanza una vez y explica. Pedir solución queda registrado. |
 | Matemática y gráficos | Cotejar cada ID con el cuaderno. Probar signos, unidades, equivalencias y un distractor por ficha. Leer ejes, ramas y marcadores en la UI. | Se cumplen los hitos de las fases 2–4, incluidas las correcciones de P2.5 y P3.3. No se dibujan resultados futuros. |
 | Modos y sesión | Cubrir Inicial, Intermedio y Examen. Recargar un intento con borrador, repetir una ficha y reabrir una sesión de los 33 originales. Probar doble envío. | Se recupera el mismo paso. Repetir conserva historial. Examen corrige al entregar. El doble envío avanza una sola vez. |
@@ -87,4 +114,4 @@ Si faltan dependencias de navegador, seguir [PRUEBAS.md](../PRUEBAS.md). Actuali
 2. Actualizar la rama con el último `origin/main`. Si la integración modifica código o pruebas, repetir la fase 5 sobre esa revisión. Subir la rama y completar el merge a `main` por el mecanismo del repositorio. Si hay protección o revisión obligatoria, indicar el PR y su estado hasta completar la integración.
 3. Ejecutar `git fetch origin main`, registrar el SHA de `origin/main` y comprobar allí el catálogo, cuaderno e informe de QA. En caso de squash, verificar el contenido en el commit integrado. Entregar el enlace a esa revisión y al informe. Un push de la rama de trabajo por sí solo deja esta fase pendiente.
 
-**Handoff entre fases.** Al cerrar cada fase, anotar en el informe el último ID y paso verificado, el commit, la prueba ejecutada, las discrepancias y el siguiente caso. Al recibir este plan, comenzar por la fase 0. La publicación de este documento solo entrega el plan y su material fuente.
+**Seguimiento.** El [informe de QA](../QA_TUTOR_PARCIAL_20.md) reúne las verificaciones, la evidencia y los pendientes de integración.

@@ -1,12 +1,14 @@
+import { DraftFormula, TutorFormula, TutorText } from "./TutorMath";
 import AnswerField from "./AnswerField";
 import GraphicPanel from "./GraphicPanel";
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import BodeGraph from "./BodeGraph";
 import { bodeExercises } from "./bode";
-import { blockExercises, finalDiagram } from "./blocks";
+
+import { blockExercises, blockReductions, finalDiagram } from "./blocks";
 import type { Exercise, Topic } from "./exercise";
 import { laplaceExercises } from "./laplace";
-import { locusExercises, routhCells, routhExercise } from "./locus";
+import { guidedLocusExercises, locusExercises, routhCells, routhExercise } from "./locus";
 import { BlockGraph, LocusGraph, RouthTable } from "./PracticeGraphics";
 import {
   accepts,
@@ -110,6 +112,8 @@ export default function Tutor() {
   const [session, setSession] = useState(readSession);
   const latest = useRef(session);
   const locked = useRef<Step | undefined>(undefined);
+  const exercisePanel = useRef<HTMLElement>(null);
+  const stepForm = useRef<HTMLFormElement>(null);
   const responseField = useRef<HTMLInputElement>(null);
   const [persistent, setPersistent] = useState(true);
   const [mode, setMode] = useState<Mode>("Intermedio");
@@ -123,21 +127,50 @@ export default function Tutor() {
   const attempt = session.attempts.find((item) => item.id === session.selected);
   const exercise = exercises.find((e) => e.id === attempt?.exercise);
   const bode = bodeExercises.find((e) => e.id === exercise?.id);
-  const locus = locusExercises.find((e) => e.id === exercise?.id);
+  const locus = (attempt?.route === "lgr-guiado" ? guidedLocusExercises : locusExercises).find((e) => e.id === exercise?.id);
   const block = blockExercises.find((e) => e.id === exercise?.id);
   const routhOnly = attempt?.route === "routh";
+  const reduction = block && attempt?.route === "reduccion" ? blockReductions[block.id] : undefined;
   const steps =
     (routhOnly
       ? locus?.routh.steps
       : attempt?.route === "visual"
         ? block?.alternate?.steps
-        : exercise?.steps) ?? [];
+        : reduction?.steps ?? locus?.steps ?? exercise?.steps) ?? [];
   const step = attempt && steps[attempt.step];
+  const showingAnswer = !!step && attempt?.revealedStep === step.id;
   const exam = attempt?.mode === "Examen";
   const last = attempt?.log.at(-1);
   const wrong = !exam && last?.outcome === "wrong" && last.step === attempt?.step && last.response === attempt?.draft;
   const axis =
     attempt?.axis ?? (step && /fase/i.test(step.concept) ? "phase" : "mag");
+
+  useEffect(() => {
+    function shortcut(event: KeyboardEvent) {
+      const panel = exercisePanel.current;
+      if (!panel || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat || event.isComposing) return;
+      const key = event.key.toUpperCase();
+      if (!["1", "2", "3", "4", "P", "R"].includes(key)) return;
+      const button = panel.querySelector<HTMLButtonElement>(`button[aria-keyshortcuts="Alt+${key}"]:not(:disabled)`);
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (key === "P" || key === "R") {
+        panel.querySelector<HTMLDialogElement>("dialog[open]")?.close();
+        button.scrollIntoView({block: "nearest"});
+      }
+      button.click();
+    }
+    window.addEventListener("keydown", shortcut, true);
+    return () => window.removeEventListener("keydown", shortcut, true);
+  }, []);
+
+  useLayoutEffect(() => {
+    const form = stepForm.current;
+    if (form && !document.querySelector("dialog[open]")) {
+      (form.querySelector<HTMLButtonElement>("[data-continue]") ?? form.querySelector<HTMLInputElement>("input:checked") ?? form.querySelector<HTMLInputElement>("input"))?.focus();
+    }
+  }, [attempt?.id, step?.id, showingAnswer]);
 
   function update(next: typeof session) {
     latest.current = next;
@@ -183,6 +216,9 @@ export default function Tutor() {
           )
           .at(-1);
     open(previous ?? { ...start(id, selectedMode), route });
+  }
+  function revealAnswer() {
+    if (attempt && step && !exam) change({ ...attempt, revealedStep: step.id });
   }
   function submitCurrent(response: string, assisted = false) {
     const current = latest.current.attempts.find(
@@ -272,40 +308,50 @@ export default function Tutor() {
           .map((group) => (
             <section key={group} className="tutor-catalog">
               <h2>{group}</h2>
-              {exercises
-                .filter((item) => item.topic === group)
-                .map((item) => {
-                  const previous = session.attempts
-                    .filter(
-                      (a) =>
-                        a.exercise === item.id && a.mode === mode && !a.route,
-                    )
-                    .at(-1);
-                  return (
-                    <div
-                      key={item.id}
-                      className="tutor-row"
-                      data-exercise={item.id}
-                    >
-                      <strong>{item.id}</strong>
-                      <span>p. {item.page}</span>
-                      <span>
-                        {status(previous)}
-                        {item.id === "B1" && !previous && mode === "Intermedio"
-                          ? " · Sugerido"
-                          : ""}
-                      </span>
-                      <button
-                        aria-label={
-                          (previous ? "Abrir intento " : "Empezar ") + item.id
-                        }
-                        onClick={() => select(item.id, mode)}
-                      >
-                        {previous ? "Abrir intento" : "Empezar"}
-                      </button>
-                    </div>
-                  );
-                })}
+              {[false, true].map((partialGroup) => (
+                <div key={String(partialGroup)}>
+                  {partialGroup && <h3>Práctica tipo parcial</h3>}
+                  {exercises
+                    .filter((item) => item.topic === group && Boolean(item.partial) === partialGroup)
+                    .map((item) => {
+                      const route = item.partial ? undefined
+                        : item.topic === "Álgebra de bloques" ? "reduccion"
+                        : mode !== "Examen" && locusExercises.some(e => e.id === item.id) ? "lgr-guiado" : undefined;
+                      const attempts = session.attempts.filter(
+                        (a) => a.exercise === item.id && a.mode === mode,
+                      );
+                      const previous = attempts.filter((a) => a.route === route).at(-1) ??
+                        attempts.filter((a) => !a.route).at(-1);
+                      return (
+                        <div
+                          key={item.id}
+                          className="tutor-row"
+                          data-exercise={item.id}
+                        >
+                          <strong>{item.id}</strong>
+                          <span>
+                            {item.partial && <>{item.partial.title} · </>}
+                            {item.id === "B6" ? item.page : "p. " + item.page}
+                          </span>
+                          <span>
+                            {status(previous)}
+                            {item.id === "B1" && !previous && mode === "Intermedio"
+                              ? " · Sugerido"
+                              : ""}
+                          </span>
+                          <button
+                            aria-label={
+                              (previous ? "Abrir intento " : "Empezar ") + item.id
+                            }
+                            onClick={() => previous ? open(previous) : select(item.id, mode, route)}
+                          >
+                            {previous ? "Abrir intento" : "Empezar"}
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              ))}
             </section>
           ))}
         <Theory />
@@ -322,7 +368,7 @@ export default function Tutor() {
         ? examStep(steps, reviewIndex, attempt.log)
         : steps[reviewIndex];
   const progress = exam && !attempt.complete ? 0 : attempt.step;
-  const allowPick = !!step?.pick && !attempt.complete && !exam;
+  const allowPick = !!step?.pick && !attempt.complete && !exam && !showingAnswer;
   const targetAxis =
     step?.concept === "Transición de fase" ||
     (step?.prompt.includes("encuentro") && step.prompt.includes("−180°"))
@@ -337,6 +383,9 @@ export default function Tutor() {
           accepts(examStep(steps, e.step, attempt.log), e.response),
         ).length
       : 0;
+  const summing = !exam && (axis === "mag"
+    ? ["Magnitud inicial", "Suma por intervalos", "Cambio de pendiente", "Continuidad"].includes(step?.concept ?? "")
+    : step?.concept === "Suma de fase");
   const visibleSum = bode?.layers[axis]
     .filter(
       ([stage, layer]) =>
@@ -353,9 +402,9 @@ export default function Tutor() {
         { title: "Diagrama original", diagram: block.diagram },
         ...(attempt.route === "visual"
           ? (block.alternate?.transformed ?? [])
-          : (block.transformed ?? [])
+          : (reduction?.transformed ?? block.transformed ?? [])
         ).filter((item) => item.stage < progress),
-        ...steps.slice(0, progress).flatMap((s) =>
+        ...(reduction ? [] : steps.slice(0, progress)).flatMap((s) =>
           s.concept === "Equivalente" && typeof s.answer === "string"
             ? [
                 {
@@ -395,48 +444,52 @@ export default function Tutor() {
   }
 
   return (
-    <main className="tutor">
+    <main className="tutor" ref={exercisePanel}>
       <header className="tutor-title">
         <button onClick={() => update({ ...latest.current, selected: null })}>
           ← Índice
         </button>
         <h1>
-          {exercise.id} · {exercise.topic}
+          {exercise.id} · {exercise.partial?.title ?? exercise.topic}
         </h1>
         <p>
-          Página {exercise.page} · {attempt.mode} · {status(attempt)}
+          {exercise.partial && "Práctica tipo parcial · "}
+          {exercise.id === "B6" ? exercise.page : "Página " + exercise.page} · {attempt.mode} · {status(attempt)}
         </p>
         {exercise.formula && (
-          <p className="tutor-formula">{exercise.formula}</p>
+          <p className="tutor-formula"><TutorFormula value={exercise.formula}/></p>
         )}
-        <p>{exercise.prompt}</p>
+        <p><TutorText value={reduction ? "Simplificá el esquema paso a paso hasta obtener el bloque equivalente." : exercise.prompt}/></p>
+        {block && <details><summary>Reglas de simplificación · tabla 4-3</summary>
+          <p>1–2: reordenar y separar sumadores · 3–4: conmutar y agrupar bloques en serie · 5: combinar ramas en paralelo · 6–7: trasladar sumadores compensando la rama lateral.</p>
+          <img src={new URL("../../../docs/pdf/diagrama de bloques.png", import.meta.url).href} alt="Tabla 4-3. Cada fila muestra el esquema original y su equivalente." style={{maxWidth:"100%", height:"auto"}}/>
+        </details>}
         <div className="tutor-actions">
+          {locus && !exam && !routhOnly && attempt.route !== "lgr-guiado" && <button onClick={() => select(exercise.id,attempt.mode,"lgr-guiado")}>Practicar K con guía</button>}
           {locus && (
             <button
               onClick={() =>
                 select(
                   exercise.id,
                   attempt.mode,
-                  routhOnly ? undefined : "routh",
+                  routhOnly ? (exam || exercise.partial ? undefined : "lgr-guiado") : "routh",
                 )
               }
             >
               {routhOnly ? "Práctica completa de LGR" : "Practicar solo Routh"}
             </button>
           )}
-          {block?.alternate && (
+          {block && !block.partial && !reduction && (
             <button
               onClick={() =>
                 select(
                   exercise.id,
                   attempt.mode,
-                  attempt.route ? undefined : "visual",
+                  "reduccion",
                 )
               }
             >
-              {attempt.route
-                ? "Usar ecuaciones de señales"
-                : block.alternate.label}
+              Practicar por simplificación
             </button>
           )}
         </div>
@@ -463,23 +516,32 @@ export default function Tutor() {
                       ? "Resuelto con ayuda"
                       : "Paso confirmado"}
                   </strong>{" "}
-                  · {previousStep.explanation}
+                  · <TutorText value={previousStep.explanation}/>
                 </p>
               )}
               <p className="tutor-step">
                 Paso {attempt.step + 1} de {steps.length} · {step.concept}
               </p>
-              <h2>{exam ? (step.examPrompt ?? step.prompt) : step.prompt}</h2>
+              <h2><TutorText value={exam ? (step.examPrompt ?? step.prompt) : step.prompt}/></h2>
               <form
                 key={step.id}
+                ref={stepForm}
+                onKeyDown={event => {
+                  if (showingAnswer || event.repeat || event.nativeEvent.isComposing || event.ctrlKey || event.metaKey) return;
+                  if (choices && !event.altKey && /^[1-9]$/.test(event.key)) {
+                    const radio = stepForm.current?.querySelectorAll<HTMLInputElement>("input[type=radio]")[Number(event.key)-1];
+                    if (radio) { event.preventDefault(); radio.focus(); radio.click(); }
+                  }
+                }}
                 onSubmit={(event) => {
                   event.preventDefault();
-                  submitCurrent(attempt.draft);
+                  submitCurrent(showingAnswer ? display(step.answer) : attempt.draft, showingAnswer);
                 }}
               >
+                <fieldset className="tutor-current-answer" disabled={showingAnswer}>
                 <AnswerField
                   step={step}
-                  value={attempt.draft}
+                  value={showingAnswer ? display(step.answer) : attempt.draft}
                   choices={choices}
                   inputRef={responseField}
                   focusError
@@ -489,6 +551,11 @@ export default function Tutor() {
                     change({ ...attempt, draft });
                   }}
                 />
+                </fieldset>
+                {showingAnswer ? <div className="tutor-revealed" role="status">
+                  <strong>Respuesta correcta · {step.expression ? <DraftFormula value={display(step.answer)}/> : display(step.answer)}</strong>
+                  <p><TutorText value={step.explanation}/></p>
+                </div> : <small className="tutor-shortcuts">Enter para confirmar{choices ? " · 1–" + choices.length + " para elegir" : ""}{!exam && " · Alt+P pista · Alt+R resolver"}</small>}
                 {allowPick && (
                   <p className="tutor-help">
                     Tocá{" "}
@@ -502,14 +569,15 @@ export default function Tutor() {
                 )}
                 <button
                   className="tutor-confirm"
-                  disabled={!attempt.draft.trim()}
+                  data-continue={showingAnswer || undefined}
+                  disabled={!showingAnswer && !attempt.draft.trim()}
                 >
-                  {exam ? "Guardar respuesta" : "Confirmar"}
+                  {showingAnswer ? "Continuar (Enter)" : exam ? "Guardar respuesta" : "Confirmar"}
                 </button>
               </form>
-              {!exam && (
+              {!exam && !showingAnswer && (
                 <div className="tutor-actions">
-                  <button
+                  <button aria-keyshortcuts="Alt+P"
                     onClick={() => {
                       recordHelp(attempt.step);
                       setHintOpen(true);
@@ -518,7 +586,7 @@ export default function Tutor() {
                     Ver pista
                   </button>
                   <button
-                    onClick={() => submitCurrent(display(step.answer), true)}
+                    aria-keyshortcuts="Alt+R" onClick={revealAnswer}
                   >
                     Resolver este paso
                   </button>
@@ -527,7 +595,7 @@ export default function Tutor() {
               {!exam && (
                 <div aria-live="polite">
                   {hintOpen && !wrong && (
-                    <p className="tutor-help">{step.hint}</p>
+                    <p className="tutor-help"><TutorText value={step.hint}/></p>
                   )}
                 </div>
               )}
@@ -585,7 +653,7 @@ export default function Tutor() {
           {(!exam || attempt.complete) &&
             reviewStep &&
             reviewIndex !== null && (
-              <details key={attempt.id}>
+              <details className="tutor-review" key={attempt.id}>
                 <summary>Pasos respondidos</summary>
                 <label>
                   Revisar paso
@@ -604,9 +672,7 @@ export default function Tutor() {
                   </select>
                 </label>
                 <p>
-                  {exam
-                    ? (reviewStep.examPrompt ?? reviewStep.prompt)
-                    : reviewStep.prompt}
+                  <TutorText value={exam ? (reviewStep.examPrompt ?? reviewStep.prompt) : reviewStep.prompt}/>
                 </p>
                 <ul>
                   {attempt.log
@@ -623,8 +689,8 @@ export default function Tutor() {
                     ))}
                 </ul>
                 <p>
-                  <strong>{display(reviewStep.answer)}</strong> ·{" "}
-                  {reviewStep.explanation}
+                  <strong>{reviewStep.expression ? <DraftFormula value={display(reviewStep.answer)}/> : display(reviewStep.answer)}</strong> ·{" "}
+                  <TutorText value={reviewStep.explanation}/>
                 </p>
                 {retry ? (
                   <form
@@ -676,8 +742,8 @@ export default function Tutor() {
                 <ol>
                   {steps.map((s) => (
                     <li key={s.id}>
-                      <p>{s.prompt}</p>
-                      <strong>{display(s.answer)}</strong> · {s.explanation}
+                      <p><TutorText value={s.prompt}/></p>
+                      <strong>{s.expression ? <DraftFormula value={display(s.answer)}/> : display(s.answer)}</strong> · <TutorText value={s.explanation}/>
                     </li>
                   ))}
                 </ol>
@@ -734,19 +800,22 @@ export default function Tutor() {
                 )}
                 <div className="tutor-actions">
                   <button
-                    aria-pressed={axis === "mag"}
+                    aria-keyshortcuts="Alt+1" aria-pressed={axis === "mag"}
                     onClick={() => change({ ...attempt, axis: "mag" })}
                   >
                     Magnitud
                   </button>
                   <button
-                    aria-pressed={axis === "phase"}
+                    aria-keyshortcuts="Alt+2" aria-pressed={axis === "phase"}
                     onClick={() => change({ ...attempt, axis: "phase" })}
                   >
                     Fase
                   </button>
                 </div>
+                <small className="tutor-shortcuts">Alt+1 magnitud · Alt+2 fase · Alt+3 aportes · Alt+4 suma por rectas</small>
                 <BodeGraph
+                  key={axis + String(summing)}
+                  summing={summing}
                   exercise={bode}
                   axis={axis}
                   progress={progress}

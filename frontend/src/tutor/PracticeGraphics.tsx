@@ -1,3 +1,4 @@
+import { DraftFormula } from "./TutorMath";
 import { useEffect, useId, useState, type MouseEvent } from "react";
 import type { Analysis } from "../types";
 import type { Diagram, Node } from "./blocks";
@@ -59,8 +60,11 @@ export function LocusGraph({
     right = 455,
     top = 18,
     bottom = 374;
-  const x = (real: number) => left + (real + 5) * ((right - left) / 7);
-  const y = (imag: number) => (top + bottom) / 2 - imag * ((right - left) / 7);
+  const minimum = exercise.partial ? -7 : -5;
+  const maximum = exercise.partial ? 6 : 2;
+  const scale = (right - left) / (maximum - minimum);
+  const x = (real: number) => left + (real - minimum) * scale;
+  const y = (imag: number) => (top + bottom) / 2 - imag * scale;
   function pick(event: MouseEvent<SVGSVGElement>) {
     const point = graphPoint(event);
     if (
@@ -70,7 +74,7 @@ export function LocusGraph({
       Math.abs(point.y - y(0)) < 25
     ) {
       onPick?.(
-        Math.round(((7 * (point.x - left)) / (right - left) - 5) * 100) / 100,
+        Math.round(((point.x - left) / scale + minimum) * 100) / 100,
       );
     }
   }
@@ -99,7 +103,7 @@ export function LocusGraph({
           stroke="#64777a"
         />
         <g className="tutor-ticks">
-          {[-5, -4, -3, -2, -1, 0, 1, 2].map((v) => (
+          {Array.from({ length: maximum - minimum + 1 }, (_, i) => minimum + i).map((v) => (
             <g key={v}>
               <line
                 x1={x(v)}
@@ -113,7 +117,7 @@ export function LocusGraph({
               </text>
             </g>
           ))}
-          {[-3, -2, -1, 0, 1, 2, 3].map((v) => (
+          {(exercise.partial ? [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5] : [-3, -2, -1, 0, 1, 2, 3]).map((v) => (
             <g key={v}>
               <line
                 x1={left}
@@ -195,8 +199,8 @@ export function LocusGraph({
                 return (
                   <line
                     key={i}
-                    x1={x(Math.max(value, -5))}
-                    x2={x(Math.min(second, 2))}
+                    x1={x(Math.max(value, minimum))}
+                    x2={x(Math.min(second, maximum))}
                     y1={py}
                     y2={py}
                     stroke="#84c6ba"
@@ -245,6 +249,10 @@ export function LocusGraph({
       <ul className="tutor-legend" aria-label="Elementos confirmados">
         {layers.some((l) => l.kind === "pole") && <li>× Polo</li>}
         {layers.some((l) => l.kind === "zero") && <li>○ Cero</li>}
+        {layers.filter((l) => (l.kind === "pole" || l.kind === "zero") && l.values[1] > 1)
+          .map(({ kind, values }) => (
+            <li key={kind + values[0]}>{kind === "pole" ? "× Polo" : "○ Cero"} en {values[0]} · multiplicidad {values[1]}</li>
+          ))}
         {layers.some((l) => l.kind === "center") && <li>△ Centroide</li>}
         {layers.some((l) => l.kind === "angles") && <li>┄ Asíntotas</li>}
         {layers.some((l) => l.kind === "segment") && (
@@ -252,7 +260,7 @@ export function LocusGraph({
         )}
         {layers.some((l) => l.kind === "break") && <li>• Ruptura</li>}
         {layers.some((l) => l.kind === "crossing") && (
-          <li>• Cruce imaginario</li>
+          <li>• Cruce imaginario{exercise.partial && ` en ±j${Number(layers.find((l) => l.kind === "crossing")!.values[0].toPrecision(5))}`}</li>
         )}
         {showBranches && <li>━ Ramas del lugar</li>}
       </ul>
@@ -277,22 +285,23 @@ export function RouthTable({
   currentStep?: number;
   onSelect?: () => void;
 }) {
+  const order = Math.max(...cells.map((cell) => cell.row));
+  const columns = Array.from({ length: Math.max(...cells.map((cell) => cell.col)) + 1 }, (_, i) => i);
   return (
     <table aria-label="Tabla de Routh">
       <thead>
         <tr>
           <th scope="col">Fila</th>
-          <th scope="col">Columna 1</th>
-          <th scope="col">Columna 2</th>
+          {columns.map((col) => <th key={col} scope="col">Columna {col + 1}</th>)}
         </tr>
       </thead>
       <tbody>
-        {[0, 1, 2, 3].map((row) => (
+        {Array.from({ length: order + 1 }, (_, i) => i).map((row) => (
           <tr key={row}>
             <th scope="row">
-              s<sup>{3 - row}</sup>
+              s<sup>{order - row}</sup>
             </th>
-            {[0, 1].map((col) => {
+            {columns.map((col) => {
               const cell = cells.find((c) => c.row === row && c.col === col);
               const active = cell && cell.stage === currentStep;
               return (
@@ -300,7 +309,7 @@ export function RouthTable({
                   {active ? (
                     <button
                       type="button"
-                      aria-label={`Responder fila s^${3 - row}, columna ${col + 1}`}
+                      aria-label={`Responder fila s^${order - row}, columna ${col + 1}`}
                       onClick={onSelect}
                     >
                       —
@@ -436,10 +445,11 @@ export function BlockGraph({
         })}
         {nodes.map(([id, col, row, label]) => {
           const [cx, cy] = coordinate(col, row);
-          if (id.startsWith("."))
-            return <circle key={id} cx={cx} cy={cy} r="3" fill="#b6ccd0" />;
-          const sum = id.startsWith("Σ");
           const active = selectable.includes(id) && !!onPick;
+          if (id.startsWith(".") && !label && !active)
+            return <circle key={id} cx={cx} cy={cy} r="3" fill="#b6ccd0" />;
+          const take = id.startsWith(".");
+          const sum = id.startsWith("Σ");
           const w = id === "equivalente" ? 120 : 50;
           return (
             <g
@@ -461,14 +471,19 @@ export function BlockGraph({
                   : undefined
               }
             >
-              {sum ? (
+              {take ? (
+                <>
+                  {active && <circle cx={cx} cy={cy} r="22" style={{ fill: "transparent" }} />}
+                  <circle cx={cx} cy={cy} r="4" style={{ fill: "#b6ccd0" }} />
+                </>
+              ) : sum ? (
                 <circle cx={cx} cy={cy} r="14" />
               ) : (
                 <rect x={cx - w / 2} y={cy - 13} width={w} height="26" rx="3" />
               )}
               <text
                 x={cx}
-                y={cy + 1}
+                y={cy + (take ? -15 : 1)}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 textLength={
@@ -478,12 +493,15 @@ export function BlockGraph({
                 }
                 lengthAdjust="spacingAndGlyphs"
               >
-                {label ?? id}
+                {take ? label ?? id.slice(1) : label && label.length > 9 && /^Q\d+$/.test(id) ? id : label ?? id}
               </text>
             </g>
           );
         })}
       </svg>
+      {nodes.filter(([id,,,label]) => /^Q\d+$/.test(id) && label && label.length > 9).map(([id,,,label]) =>
+        <p key={id}>{id} = <DraftFormula value={label!}/></p>)}
+
     </div>
   );
 }

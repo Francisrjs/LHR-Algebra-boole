@@ -4,6 +4,8 @@ Las páginas se cuentan desde la portada del manuscrito «FINAL TEORÍA DE CONTR
 
 ## Bode directo
 
+Las fichas P1.1 a P4.5 usan la paginación de su propio PDF. Sus criterios y resultados están en el [cuaderno del parcial](PARCIAL_20_EJERCICIOS.md), con un [índice por ejercicio](plan/PLAN_TUTOR_PARCIAL_20.md#los-20-ejercicios-del-parcial).
+
 Los cinco originales piden trazar magnitud y fase para obtener MF y MG. Para cada binomio se extrae su constante, se identifica signo y multiplicidad y se empieza desde la frecuencia positiva indicada. En magnitud se suman dB y se conserva continuidad al pasar de intervalo. En fase se suma en la rama continua, con transiciones entre ωb/10 y 10ωb. Un polo simple aporta −20 dB/década y −90° finales; un cero simple aporta los mismos valores con signo opuesto. Se calcula MF firmado como 180°+φ reducido a [−180°, 180°), y MG como −M en un encuentro de fase con la dirección real negativa. Las lecturas por rectas usan ±2 dB o grados y ±0,065 décadas para cruces. Las lecturas exactas usan ±0,15 dB o grados y ±0,005 décadas. La interfaz contempla Hz y radianes como unidades alternativas compatibles.
 
 ### B1 · p. 33

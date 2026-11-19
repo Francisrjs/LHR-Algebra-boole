@@ -2,16 +2,35 @@
 import type { BodeDecomposition } from "../types";
 import type { Step } from "./session";
 import type { Exercise } from "./exercise";
+import { partial } from "./exercise";
 
-const factorColors = ["#dab967", "#84c6ba", "#83abf1", "#d89ccb", "#e58a6b"];
+const factorColors = [
+  "#dab967",
+  "#84c6ba",
+  "#83abf1",
+  "#d89ccb",
+  "#e58a6b",
+  "#bc9cff",
+  "#ffcf88",
+];
 export type Layer = {
   label: string;
   color: string;
-  style: "factor" | "partial" | "total" | "exact" | "marker" | "frequency";
+  style:
+    | "factor"
+    | "partial"
+    | "total"
+    | "exact"
+    | "marker"
+    | "frequency"
+    | "slope"
+    | "identity"
+    | "pole"
+    | "zero";
   points: [number, number][];
 };
 export type BodeExercise = Exercise & {
-  page: number;
+  page: number | string;
   formula: string;
   range: [number, number];
   decomposition: BodeDecomposition;
@@ -27,18 +46,19 @@ export type BodeExercise = Exercise & {
   }[];
 };
 
-type Factor = [frequency: number, signedMultiplicity: number];
+type Factor = [frequency: number, signedMultiplicity: number, order?: 2];
 type Model = {
   id: string;
-  page: number;
+  page: number | string;
   formula: string;
   gain: number;
   factors: Factor[];
   range: [number, number];
-  exactGainCrossings: number[];
-  exactPhaseCrossings: number[];
+  exactGainCrossings?: number[];
+  exactPhaseCrossings?: number[];
   interpretation: string;
-  stability: "Estable" | "Inestable";
+  stability?: "Estable" | "Inestable";
+  partial?: Exercise["partial"];
 };
 const models: Model[] = [
   {
@@ -129,6 +149,62 @@ const models: Model[] = [
     interpretation:
       "El primer cruce de 0 dB es ascendente y el segundo descendente. La fase exacta va de +180° hacia −90° y se conserva esa rama en el gráfico. El primer MF firmado es ≈ −20,01° (distancia de ≈ 20° a +180°, reportada sin signo en el apunte). El segundo es ≈ 90,64°. El cierre unitario negativo tiene tres polos con parte real negativa.",
   },
+  {
+    id: "B6",
+    page: "Ejemplo por contribuciones",
+    formula: "10⁷(s²+s+1) / [s(s+1)(s+10)(s+100)(s+1000)]",
+    gain: 10,
+    factors: [
+      [0, -1],
+      [1, -1],
+      [1, 1, 2],
+      [10, -1],
+      [100, -1],
+      [1000, -1],
+    ],
+    range: [0.01, 100000],
+    interpretation: "El par de ceros suma 180° y la fase final es −270°.",
+  },
+  {
+    id: "P3.1", page: 4, partial: partial("Tres polos simples"),
+    formula: "10⁴ / [(s+1)(s+10)(s+100)]",
+    gain: 10, factors: [[1, -1], [10, -1], [100, -1]], range: [0.01, 10000],
+    exactGainCrossings: [7.798], exactPhaseCrossings: [Math.sqrt(1110)],
+    stability: "Estable",
+    interpretation: "D+N = s³+111s²+1110s+11000 tiene sus tres polos en el semiplano izquierdo.",
+  },
+  {
+    id: "P3.2", page: 4, partial: partial("Integrador y dos polos"),
+    formula: "2000 / [s(s+1)(s+20)]",
+    gain: 100, factors: [[0, -1], [1, -1], [20, -1]], range: [0.01, 1000],
+    exactGainCrossings: [9.480], exactPhaseCrossings: [Math.sqrt(20)],
+    stability: "Inestable",
+    interpretation: "La primera columna de Routh de s³+21s²+20s+2000 tiene dos cambios de signo.",
+  },
+  {
+    id: "P3.3", page: 4, partial: partial("Dos cruces de magnitud"),
+    formula: "10⁵s² / [(s+1)(s+10)²(s+100)]",
+    gain: 10, factors: [[0, 2], [1, -1], [10, -2], [100, -1]], range: [0.01, 10000],
+    exactGainCrossings: [0.32441, 308.252], exactPhaseCrossings: [],
+    stability: "Estable",
+    interpretation: "Hay un cruce ascendente con MF negativo y uno descendente con MF positivo. Los cuatro polos de D+N tienen parte real negativa.",
+  },
+  {
+    id: "P3.4", page: 4, partial: partial("Polos cercanos"),
+    formula: "20000 / [(s+1)(s+2)(s+10)]",
+    gain: 1000, factors: [[1, -1], [2, -1], [10, -1]], range: [0.01, 1000],
+    exactGainCrossings: [26.518], exactPhaseCrossings: [Math.sqrt(32)],
+    stability: "Inestable",
+    interpretation: "En s³+13s²+32s+20020 se cumple 13·32 < 20020. Routh da dos polos en el semiplano derecho.",
+  },
+  {
+    id: "P3.5", page: 5, partial: partial("Ceros complejos"),
+    formula: "10⁷(s²+s+1) / [s(s+10)(s+100)(s+1000)]",
+    gain: 10, factors: [[0, -1], [1, 1, 2], [10, -1], [100, -1], [1000, -1]],
+    range: [0.01, 100000], exactGainCrossings: [3083.373], exactPhaseCrossings: [],
+    stability: "Estable",
+    interpretation: "El par de ceros aporta 0 dB y +90° a 1 rad/s. D+N tiene cuatro polos con parte real negativa.",
+  },
 ];
 
 const phaseMargin = (phase: number) =>
@@ -137,7 +213,15 @@ const phaseMargin = (phase: number) =>
 function exactValue(model: Model, omega: number) {
   let magnitude = 20 * Math.log10(model.gain);
   let phase = 0;
-  for (const [frequency, multiplicity] of model.factors) {
+  for (const [frequency, multiplicity, order] of model.factors) {
+    if (order === 2) {
+      const ratio = omega / frequency;
+      const re = 1 - ratio ** 2;
+      const im = ratio; // 2ζω/ωn, con ζ = 0,5 para s²+s+1.
+      magnitude += multiplicity * 20 * Math.log10(Math.hypot(re, im));
+      phase += multiplicity * Math.atan2(im, re) * 180 / Math.PI;
+      continue;
+    }
     magnitude += frequency
       ? multiplicity * 10 * Math.log10(1 + (omega / frequency) ** 2)
       : multiplicity * 20 * Math.log10(omega);
@@ -164,28 +248,46 @@ function crossings(points: [number, number][], level: number) {
   return result;
 }
 
+function refineCrossing(model: Model, near: number, axis: "magnitude" | "phase", level: number) {
+  let left = near * 0.99;
+  let right = near * 1.01;
+  const difference = (omega: number) => exactValue(model, omega)[axis] - level;
+  const ascending = difference(left) < 0;
+  for (let i = 0; i < 48; i++) {
+    const middle = (left + right) / 2;
+    if ((difference(middle) < 0) === ascending) left = middle;
+    else right = middle;
+  }
+  return (left + right) / 2;
+}
+
 function build(model: Model): BodeExercise {
   const { id, page, formula, range, gain } = model;
-  const factors = model.factors.map(([frequency, multiplicity], i) => ({
-    id: String(i),
-    label: frequency ? `ωb = ${frequency} rad/s` : "Origen",
-    latex: "",
-    frequency,
-    multiplicity: Math.abs(multiplicity),
-    kind: multiplicity > 0 ? ("zero" as const) : ("pole" as const),
-    order: 1,
-    slope: 20 * multiplicity,
-    phaseFinal: 90 * multiplicity,
-    phaseAvailable: true,
-    transition: frequency
-      ? ([frequency / 10, frequency * 10] as [number, number])
-      : null,
-    magnitude: [],
-    phase: [],
-    marker: null,
-    markerPhase: null,
-    root: { re: -frequency, im: 0 },
-  }));
+  const factors = model.factors.map(
+    ([frequency, multiplicity, order = 1], i) => ({
+      id: String(i),
+      label: frequency ? `ωb = ${frequency} rad/s` : "Origen",
+      latex: "",
+      frequency,
+      multiplicity: Math.abs(multiplicity),
+      kind: multiplicity > 0 ? ("zero" as const) : ("pole" as const),
+      order,
+      slope: 20 * multiplicity * order,
+      phaseFinal: 90 * multiplicity * order,
+      phaseAvailable: true,
+      transition: frequency
+        ? ([frequency / 10, frequency * 10] as [number, number])
+        : null,
+      magnitude: [],
+      phase: [],
+      marker: null,
+      markerPhase: null,
+      root:
+        order === 2
+          ? { re: -0.5, im: Math.sqrt(3) / 2 }
+          : { re: -frequency, im: 0 },
+    }),
+  );
   const decomposition = {
     gain,
     gainDb: 20 * Math.log10(gain),
@@ -251,18 +353,22 @@ function build(model: Model): BodeExercise {
       factors
         .filter((f) => f.kind === "zero")
         .map((f) =>
-          f.frequency
-            ? `(1+s/${f.frequency})^${f.multiplicity}`
-            : `s^${f.multiplicity}`,
+          f.order === 2
+            ? "(s²+s+1)"
+            : f.frequency
+              ? `(1+s/${f.frequency})^${f.multiplicity}`
+              : `s^${f.multiplicity}`,
         )
         .join(" · ") || "1"
     } / [${
       factors
         .filter((f) => f.kind === "pole")
         .map((f) =>
-          f.frequency
-            ? `(1+s/${f.frequency})^${f.multiplicity}`
-            : `s^${f.multiplicity}`,
+          f.order === 2
+            ? "(s²+s+1)"
+            : f.frequency
+              ? `(1+s/${f.frequency})^${f.multiplicity}`
+              : `s^${f.multiplicity}`,
         )
         .join(" · ") || "1"
     }].`,
@@ -282,16 +388,19 @@ function build(model: Model): BodeExercise {
   line(
     "mag",
     gainMag,
-    "Ganancia",
+    `Ganancia · ${decomposition.gainDb} dB`,
     factorColors[0],
     "factor",
     rows.map((r) => [r.omega, decomposition.gainDb]),
   );
   factors.forEach((f, i) => {
-    const description = `${f.kind === "pole" ? "Polo" : "Cero"} ${["", "simple", "doble", "triple"][f.multiplicity]}`;
+    const description =
+      f.order === 2
+        ? "Par de ceros complejos"
+        : `${f.kind === "pole" ? "Polo" : "Cero"} ${["", "simple", "doble", "triple"][f.multiplicity]}`;
     const identity = add(
       "Factores",
-      `Identificá el factor ${f.frequency ? `asociado a s = −${f.frequency}` : "en el origen"}.`,
+      `Identificá el factor ${f.order === 2 ? "s²+s+1" : f.frequency ? `asociado a s = −${f.frequency}` : "en el origen"}.`,
       description,
       "El numerador aporta ceros, el denominador polos. Contá las repeticiones.",
       `${name(i)}. ${description}.`,
@@ -303,6 +412,7 @@ function build(model: Model): BodeExercise {
           "Cero simple",
           "Cero doble",
           "Cero triple",
+          ...(f.order === 2 ? ["Par de ceros complejos"] : []),
         ],
       },
     );
@@ -311,8 +421,41 @@ function build(model: Model): BodeExercise {
       label: `Factor ${i + 1} · ${description}`,
       color: factorColors[i + 1],
     });
+    const symbol = f.kind === "pole" ? "×" : "○";
+    const factorLabel =
+      symbol + " " + description + (f.frequency ? "" : " en el origen · ω = 0");
+    for (const axis of ["mag", "phase"] as const) {
+      const label =
+        axis === "mag"
+          ? (f.slope > 0 ? "+" : "") + f.slope + " dB/década"
+          : (f.frequency ? "0° → " : "") + f.phaseFinal + "°";
+      line(
+        axis,
+        identity,
+        factorLabel +
+          (f.frequency ? " · " + f.frequency + " rad/s" : "") +
+          " · " +
+          label,
+        factorColors[i + 1],
+        "factor",
+        rows.map((r) => [
+          r.omega,
+          axis === "mag" ? r.magnitudes[i] : r.phases[i]!,
+        ]),
+      );
+      const anchor = f.frequency || 1;
+      const value = manualValue(decomposition, anchor);
+      line(
+        axis,
+        identity,
+        factorLabel + (f.frequency ? " · " + f.frequency + " rad/s" : ""),
+        factorColors[i + 1],
+        f.kind,
+        [[anchor, axis === "mag" ? value.magnitudes[i] : value.phases[i]!]],
+      );
+    }
     if (f.frequency) {
-      const corner = add(
+      add(
         "Quiebre",
         `¿A qué frecuencia quiebra el factor ${i + 1}?`,
         number(f.frequency, "rad/s", 0.055),
@@ -328,23 +471,19 @@ function build(model: Model): BodeExercise {
           pick: "frequency",
         },
       );
-      line(
-        "mag",
-        corner,
-        `Quiebre del factor ${i + 1}`,
-        factorColors[i + 1],
-        "frequency",
-        [[f.frequency, 0]],
-      );
     }
-    add(
+    const slopeStage = add(
       "Pendiente",
       `¿Qué pendiente aporta el factor ${i + 1} ${f.frequency ? "después del quiebre" : "en toda la banda"}?`,
       number(f.slope, "dB/década"),
       "Cada cero suma 20 y cada polo resta 20 dB/década.",
       "Multiplicá por el orden del factor.",
     );
+    const anchor = Math.min(range[1], (f.frequency || range[0]) * Math.sqrt(10));
+    line("mag", slopeStage, (f.slope > 0 ? "+" : "") + f.slope + " dB/déc",
+      factorColors[i+1], "slope", [[anchor, manualValue(decomposition, anchor).magnitudes[i]]]);
     const w = f.frequency ? f.frequency * 10 : range[0];
+    const magnitude = manualValue(decomposition, w).magnitudes[i];
     const stage = add(
       "Magnitud individual",
       `Calculá el aporte del factor ${i + 1} en ω = ${w} rad/s.`,
@@ -357,10 +496,10 @@ function build(model: Model): BodeExercise {
     line(
       "mag",
       stage,
-      name(i),
+      `${name(i)} · ${magnitude} dB a ${w} rad/s`,
       factorColors[i + 1],
-      "factor",
-      rows.map((r) => [r.omega, r.magnitudes[i]]),
+      "marker",
+      [[w, magnitude]],
     );
   });
   const initialMag = add(
@@ -370,26 +509,31 @@ function build(model: Model): BodeExercise {
     "Sumá la ganancia y el aporte de origen en dB.",
     "Este punto ancla el primer tramo de la suma.",
   );
-  line("mag", initialMag, "Inicio de magnitud", "#f8e6ae", "marker", [
+  line("mag", initialMag, "Inicio de magnitud", "#f8e6ae", "partial", [
     magPoints[0],
   ]);
-  const starts = [range[0], ...finite];
+  const starts = [range[0], ...new Set(finite)];
   starts.forEach((w, i) => {
     const end = starts[i + 1] ?? range[1];
     if (i > 0) {
-      const index = factors.findIndex((f) => f.frequency === w);
-      add(
-        "Suma por intervalos",
-        `¿Qué factor cambia la pendiente en ω = ${w} rad/s?`,
-        `Factor ${index + 1}`,
-        "Compará ω con los quiebres de los factores finitos.",
-        "En este punto comienza el aporte de magnitud de ese factor.",
-        { choices: factors.map((_, j) => `Factor ${j + 1}`) },
-      );
+      const active = factors.filter((f) => f.frequency === w);
+      const index = factors.indexOf(active[0]);
+      if (active.length === 1)
+        add(
+          "Suma por intervalos",
+          `¿Qué factor cambia la pendiente en ω = ${w} rad/s?`,
+          `Factor ${index + 1}`,
+          "Compará ω con los quiebres de los factores finitos.",
+          "En este punto comienza el aporte de magnitud de ese factor.",
+          { choices: factors.map((_, j) => `Factor ${j + 1}`) },
+        );
       add(
         "Cambio de pendiente",
         `¿En cuánto cambia la pendiente al pasar por ω = ${w} rad/s?`,
-        number(factors[index].slope, "dB/década"),
+        number(
+          active.reduce((sum, f) => sum + f.slope, 0),
+          "dB/década",
+        ),
         "El cambio es el aporte del factor que se activa.",
         "Conservá el signo de este incremento al actualizar la pendiente total.",
       );
@@ -418,7 +562,7 @@ function build(model: Model): BodeExercise {
       final ? "Magnitud total" : "Magnitud parcial",
       "#f8e6ae",
       final ? "total" : "partial",
-      magPoints.filter((p) => p[0] <= end),
+      [magPoints[0], ...intervals.map(({ end, magnitude }): [number, number] => [end, magnitude])],
     );
   });
   const gainPhaseStage = add(
@@ -474,6 +618,15 @@ function build(model: Model): BodeExercise {
         ? "El punto medio fija el aporte en ωb."
         : "La fase en el origen es constante.",
     );
+    const angle = manualValue(decomposition, w).phases[i]!;
+    line(
+      "phase",
+      stage,
+      `${name(i)} · ${angle}° a ${w} rad/s`,
+      factorColors[i + 1],
+      "marker",
+      [[w, angle]],
+    );
     if (f.frequency) {
       stage = add(
         "Pendiente de fase",
@@ -483,14 +636,6 @@ function build(model: Model): BodeExercise {
         "El signo indica si se acumula adelanto o atraso de fase.",
       );
     }
-    line(
-      "phase",
-      stage,
-      name(i),
-      factorColors[i + 1],
-      "factor",
-      rows.map((r) => [r.omega, r.phases[i]!]),
-    );
   });
   [
     range[0],
@@ -510,14 +655,18 @@ function build(model: Model): BodeExercise {
       stage,
       final ? "Fase total" : "Fase parcial",
       "#f8e6ae",
-      i === 0 ? "marker" : final ? "total" : "partial",
-      phasePoints.filter((p) => p[0] <= w),
+      final ? "total" : "partial",
+      points.slice(0, i + 1).map(omega => [omega, manualValue(decomposition, omega).phase!]),
     );
   });
   function margins(exact: boolean) {
     const origin = exact ? "exacto" : "por rectas";
-    const gc = exact ? model.exactGainCrossings : crossings(magPoints, 0);
-    const pc = exact ? model.exactPhaseCrossings : crossings(phasePoints, -180);
+    const gc = exact
+      ? (model.exactGainCrossings ?? []).map((w) => model.partial ? refineCrossing(model, w, "magnitude", 0) : w)
+      : crossings(magPoints, 0);
+    const pc = exact
+      ? (model.exactPhaseCrossings ?? []).map((w) => model.partial ? refineCrossing(model, w, "phase", -180) : w)
+      : crossings(phasePoints, -180);
     const response = (w: number) =>
       exact ? exactValue(model, w) : manualValue(decomposition, w);
     for (const [axis, frequencies] of [
@@ -532,9 +681,16 @@ function build(model: Model): BodeExercise {
           `¿Existe un cruce ${origin} de ${target} a frecuencia finita?`,
           "Ninguno",
           "Un límite al infinito no corresponde a una frecuencia finita.",
-          "Con la convención habitual, la ausencia de cruce de fase implica MG infinito.",
+          isGain ? "La magnitud no cambia de lado alrededor de 0 dB." :
+            "Con la convención habitual, la ausencia de cruce de fase implica MG infinito.",
           { choices: ["Ninguno", "Un cruce", "Dos cruces"] },
         );
+        if (model.partial && exact && !isGain) {
+          add("Márgenes", "¿Cuál es el MG exacto?", "Infinito",
+            "Buscá un cruce finito con el semieje real negativo.",
+            "Sin ese cruce, el margen de ganancia es infinito.",
+            { choices: ["Infinito", "0 dB", "−∞ dB"] });
+        }
       }
       frequencies.forEach((w, i) => {
         const direction = isGain
@@ -554,7 +710,7 @@ function build(model: Model): BodeExercise {
           isGain
             ? "Buscá dónde la magnitud toma 0 dB."
             : "Buscá la primera frecuencia donde la fase toma −180°.",
-          `El marcador señala la misma frecuencia en los dos gráficos.${direction ? " El cruce de magnitud es " + direction + "." : ""}`,
+          `El marcador señala la misma frecuencia en los dos gráficos.${direction && !(model.partial && exact && gc.length > 1) ? " El cruce de magnitud es " + direction + "." : ""}`,
           { pick: "frequency" },
         );
         const value = response(w);
@@ -608,17 +764,47 @@ function build(model: Model): BodeExercise {
           `El resultado corresponde al cruce en ω ≈ ${Number(w.toPrecision(5))} rad/s.`,
           { gradeFromPrevious: isGain ? phaseMargin : (entered) => -entered },
         );
+        if (model.partial && exact && isGain && gc.length > 1) {
+          add("Sentido del cruce", "¿En qué sentido atraviesa la magnitud el nivel de 0 dB?",
+            direction === "ascendente" ? "Ascendente" : "Descendente",
+            "Compará la magnitud inmediatamente antes y después de la frecuencia de cruce.",
+            direction === "ascendente"
+              ? "La magnitud pasa de negativa a positiva en dB."
+              : "La magnitud pasa de positiva a negativa en dB.",
+            { choices: ["Ascendente", "Descendente"] });
+        }
       });
     }
+  }
+  const exercise: BodeExercise = {
+    id,
+    page,
+    formula: (model.partial ? "L(s) = " : model.stability ? "G(s) = " : "GH(s) = ") + formula,
+    partial: model.partial,
+    range,
+    decomposition,
+    steps,
+    layers,
+    identified,
+    intervals,
+    topic: "Bode directo",
+    prompt:
+      "Trazá las contribuciones de magnitud y fase. Hallá los márgenes de fase y de ganancia.",
+    note: model.interpretation,
+  };
+  if (!model.stability) {
+    exercise.prompt =
+      "Trazá cada contribución y sumá las rectas de magnitud y fase.";
+    return exercise;
   }
   margins(false);
   const exactStage = add(
     "Modelo exacto",
     "¿Qué expresión permite contrastar las rectas con la transferencia exacta?",
-    "G(jω)",
+    model.partial ? "L(jω)" : "G(jω)",
     "Evaluá sobre el eje imaginario.",
-    "Evaluá 20 log₁₀|G(jω)| y sumá los argumentos de sus factores.",
-    { choices: ["G(jω)", "G(ω)", "G(0)"] },
+    "Evaluá 20 log₁₀|L(jω)| y sumá los argumentos de sus factores.",
+    { choices: model.partial ? ["L(jω)", "L(ω)", "L(0)"] : ["G(jω)", "G(ω)", "G(0)"] },
   );
   const exactRows = Array.from(
     { length: 321 },
@@ -640,6 +826,12 @@ function build(model: Model): BodeExercise {
     "exact",
     exactRows.map(([w, v]) => [w, v.phase]),
   );
+  if (id === "P3.5") {
+    add("Factor cuadrático", "¿Cuántos dB aporta solo s²+s+1 a ω=1 rad/s?",
+      number(0, "dB", 0.15), "Sustituí s=j en el numerador.", "El factor vale j y su módulo es 1.");
+    add("Factor cuadrático de fase", "¿Cuál es su fase exacta a ω=1 rad/s?",
+      number(90, "°", 0.15), "Ubicá j en el plano complejo.", "El semieje imaginario positivo tiene argumento +90°.");
+  }
   margins(true);
   add(
     "Interpretación",
@@ -657,27 +849,15 @@ function build(model: Model): BodeExercise {
   );
   add(
     "Estabilidad",
-    "Si G=N/D es el lazo de una realimentación unitaria negativa, ¿cómo resulta el cierre al analizar D+N?",
+    model.partial
+      ? "Si L=N/D es el lazo abierto, ¿cómo resulta el cierre negativo al analizar D+N?"
+      : "Si G=N/D es el lazo de una realimentación unitaria negativa, ¿cómo resulta el cierre al analizar D+N?",
     model.stability,
     "Usá el criterio de Routh sobre D+N para comprobarlo. Considerá el sentido de cada cruce.",
     model.interpretation,
     { choices: ["Estable", "Inestable", "Marginal"] },
   );
-  return {
-    id,
-    page,
-    formula: "G(s) = " + formula,
-    range,
-    decomposition,
-    steps,
-    layers,
-    identified,
-    intervals,
-    topic: "Bode directo",
-    prompt:
-      "Trazá las contribuciones de magnitud y fase. Hallá los márgenes de fase y de ganancia.",
-    note: model.interpretation,
-  };
+  return exercise;
 }
 
 export const bodeExercises = models.map(build);

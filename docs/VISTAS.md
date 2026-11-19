@@ -51,3 +51,9 @@ Subsistemas: operandos etiquetados → parser → operación racional → equiva
 Admite 2 a 32 funciones; serie, paralelo, resta y realimentación negativa. Con más de dos operandos se aplica la operación acumulativamente de izquierda a derecha. La equivalente se puede enviar como nueva G del analizador, con H=1 y K=1. Operandos, operación e historial se conservan en el JSON. El editor interactivo permite resolver grafos e incluye los ejercicios 7 y 8 del libro y variantes numéricas propias.
 
 Prueba: 1/(s+1) y 1/(s+2). Serie: 1/(s²+3s+2). Paralelo: (2s+3)/(s²+3s+2). Realimentación: (s+2)/(s²+3s+3).
+
+## Tutor de Control Automático
+
+Cada filtro temático incluye «Práctica tipo parcial», con cinco fichas identificadas del P1.1 al P4.5. El índice muestra la página original y el estado del intento para la dificultad elegida. «Empezar» abre la consigna y crea el intento. Las respuestas y el borrador quedan guardados en el navegador.
+
+En Inicial e Intermedio se puede pedir una pista o resolver el paso con ayuda. En Examen la corrección aparece al entregar. Los esquemas de bloques, las curvas de Bode y los elementos del LGR se actualizan conforme al progreso. Para las lecturas gráficas se puede escribir el valor en el campo de respuesta. Las fichas P4 ofrecen también «Practicar solo Routh». [Índice por ejercicio](plan/PLAN_TUTOR_PARCIAL_20.md#los-20-ejercicios-del-parcial) · [Verificación](QA_TUTOR_PARCIAL_20.md)

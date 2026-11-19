@@ -23,7 +23,17 @@ async function run() {
     else await page.getByRole("radio",{name:value,exact:true}).check();
     await button(action).click();
   };
-  const assisted = () => button("Resolver este paso").click();
+  const assisted = async () => {
+    const before = await step();
+    await button("Resolver este paso").click();
+    assert.equal(await step(),before);
+    if (await page.locator(".tutor-current-answer input[type=radio]").count()) {
+      assert.equal(await page.locator(".tutor-current-answer input:checked").count(),1);
+    }
+    assert.ok(await page.locator(".tutor-revealed strong").innerText());
+    assert.equal(await button("Continuar (Enter)").evaluate(el=>el===document.activeElement),true);
+    await page.keyboard.press("Enter");
+  };
   const advanceTo = async (exerciseConcept,max=80)=>{
     for(let i=0;i<max;i++){
       if((await step()).includes(exerciseConcept)) return;
@@ -43,7 +53,7 @@ async function run() {
     await page.goto(base);
     await button("Tutor").tap();
     await button("Empezar B1").waitFor();
-    assert.equal(await page.locator("[data-exercise]").count(),33);
+    assert.equal(await page.locator("[data-exercise]").count(),54);
     assert.equal(await noHorizontalOverflow(),true);
     await page.screenshot({path:path.join(output,"tutor-indice-360.png")});
     await button("Empezar B1").tap();
@@ -66,7 +76,32 @@ async function run() {
     await page.locator(".tutor form").evaluate(form=>{form.requestSubmit();form.requestSubmit();});
     assert.match(await step(),/Paso 2 /);
     await answer("0 dB");
-    assert.deepEqual(await layers(),["Ganancia"]);
+    assert.deepEqual(await layers(),["Ganancia · 0 dB"]);
+    assert.ok(await page.locator(".tutor-formula mfrac").count());
+    const radioIndex = await page.getByRole("radio",{name:"Polo simple",exact:true}).evaluate(el =>
+      [...el.form.querySelectorAll("input[type=radio]")].indexOf(el)+1);
+    assert.equal(await page.locator("input[type=radio]:focus").count(),1);
+    await page.keyboard.press(String(radioIndex));
+    await page.keyboard.press("Enter");
+    assert.equal(await input().evaluate(el=>el===document.activeElement),true);
+    assert.ok(await page.locator(".tutor-decade msup").count());
+    assert.ok((await layers()).some(label => label.includes("× Polo simple en el origen · ω = 0 · -20 dB/década")));
+    await button("Ampliar").tap();
+    await page.keyboard.press("Alt+2");
+    assert.equal(await button("Fase").getAttribute("aria-pressed"),"true");
+    await page.keyboard.press("Alt+1");
+    assert.equal(await button("Magnitud").getAttribute("aria-pressed"),"true");
+    await page.keyboard.press("Alt+p");
+    assert.equal(await page.locator("dialog[open]").count(),0);
+    assert.ok(await page.getByText("Cada cero suma 20 y cada polo resta 20 dB/década.",{exact:true}).isVisible());
+    await input().focus();
+    await page.keyboard.type("-20db/dc");
+    await page.keyboard.press("Enter");
+    assert.ok(await page.locator(".tutor-graph text").allTextContents().then(labels=>labels.includes("-20 dB/déc")));
+    assert.equal(await input().evaluate(el=>el===document.activeElement),true);
+    assert.ok((await layers()).some(label => label.includes("-20 dB/década")));
+    await answer("40");
+    assert.ok((await layers()).some(label => label.includes("40 dB a 0.01 rad/s")));
     await advanceTo("Quiebre");
     await button("Ampliar").tap();
     await page.getByRole("dialog", {name:"Construcción gráfica ampliada"}).waitFor();
@@ -91,9 +126,30 @@ async function run() {
     assert.equal(await button("Fase").getAttribute("aria-pressed"),"true");
     await button("Magnitud").tap();
     assert.ok((await layers()).some(s=>s.includes("Origen")));
+    await advanceTo("Quiebre");
+    await answer("1000");
+    assert.ok((await layers()).some(label => label.includes("× Polo simple · 1000 rad/s")));
+    await advanceTo("Cambio de pendiente");
+    const levels = await page.locator('.tutor-graph circle[fill="#ff394b"] + text').allTextContents();
+    assert.equal(levels.at(-1),"-40");
+    assert.ok(!levels.includes("-80") && !levels.includes("-140"));
+    assert.deepEqual(await page.locator("[data-confirmed-frequency]").evaluateAll(nodes=>nodes.map(n=>n.dataset.confirmedFrequency)),["0.01","100"]);
+    await advanceTo("Suma de fase");
+    await assisted();
+    assert.match(await step(),/Paso 38 /);
+    const confirmedAtTen = page.locator('[data-confirmed-frequency="10"]');
+    assert.equal(await confirmedAtTen.count(),0);
+    assert.equal(await page.locator(".tutor-decade").count(),1);
+    await answer("123");
+    assert.equal(await confirmedAtTen.count(),0);
+    await answer("-90");
+    assert.equal(await confirmedAtTen.count(),1);
+    assert.equal(await page.locator(".tutor-decade").count(),2);
     await page.setViewportSize({width:390,height:844});
     await finishPractice();
-    assert.ok((await layers()).some(s=>s.includes("exacta")));
+    await button("Magnitud").tap();
+    await button("Suma por rectas").tap();
+    assert.ok((await layers()).includes("Magnitud total"));
     await page.screenshot({path:path.join(output,"tutor-bode-390.png"),fullPage:true});
     assert.equal(await noHorizontalOverflow(),true);
     await button("Marcar para repaso").tap();
@@ -123,26 +179,44 @@ async function run() {
     await button("Empezar L5").tap();
     await answer("-3");
     assert.ok((await layers()).includes("× Polo"));
+    await advanceTo("Despeje de K");
+    assert.equal(await page.getByRole("radio").count(),3);
+    await assisted();
+    assert.match(await step(),/Derivar D/);
+    await page.reload();
+    assert.match(await step(),/Derivar D/);
+    await advanceTo("Ganancia de ruptura");
+    await answer("0,6311");
     await advanceTo("Ganancia crítica");
     assert.ok((await layers()).includes("△ Centroide"));
     assert.ok(!(await layers()).includes("• Cruce imaginario"));
     await answer("12");
-    await assisted();
+    await advanceTo("Cruce imaginario");
     await answer("sqrt(3) rad/s");
     assert.ok((await layers()).includes("• Cruce imaginario"));
     await button("Practicar solo Routh").tap();
     assert.equal(await page.getByRole("img",{name:"Plano complejo del lugar de las raíces"}).count(),0);
 
     await button("← Índice").tap();
+    await button("Empezar D12").tap();
+    const schema = page.locator(".tutor-visual").getByRole("combobox");
+    await answer("G2/(1-G2)");
+    assert.match(await schema.locator("option:checked").innerText(),/Positivo/);
+    await page.reload();
+    assert.match(await schema.locator("option:checked").innerText(),/Positivo/);
+    await answer("G1*G2/(1-G2)");
+    assert.match(await schema.locator("option:checked").innerText(),/Serie/);
+    await answer("G1*G2/(1-G2+G1*G2)");
+    assert.equal(await page.getByRole("heading",{name:"Resultado del intento"}).isVisible(),true);
+    await button("← Índice").tap();
     await button("Empezar D15").tap();
     const diagram = page.getByRole("group",{name:/^Diagrama de bloques/});
     assert.match(await diagram.getAttribute("aria-label"),/nodo x a H1/);
-    await diagram.getByRole("button",{name:"Seleccionar G",exact:true}).press("Enter");
-    await button("Confirmar").tap();
-    await answer("H1*G*e1");
+    await answer("G*H1");
     await answer("G+H2");
+    await answer("1/(1+G*H1)");
     await answer("(G+H2)/(1+(G+H2)*H1)");
-    assert.match(await step(),/Equivalente/);
+    assert.match(await step(),/serie/);
     await answer("(H2+G)/(G*H1+1)");
     assert.equal(await page.getByRole("heading",{name:"Resultado del intento"}).isVisible(),true);
     assert.equal(await noHorizontalOverflow(),true);
@@ -150,7 +224,7 @@ async function run() {
     await button("← Índice").tap();
     await button("Empezar E3").tap();
     await input().fill("10/(");
-    assert.equal(await page.getByLabel("Vista previa",{exact:true}).innerText(),"10/(");
+    assert.match(await page.getByLabel("Vista previa",{exact:true}).innerText(),/Falta/);
     for(const width of [768,1440,390]) {
       await page.setViewportSize({width,height:844});
       assert.equal(await noHorizontalOverflow(),true);
@@ -158,8 +232,44 @@ async function run() {
     }
     for (const value of ["10/s","10/(s*(s+1)*(s+2))","5","-10","5","5*(1-exp(-t))^2","5","5"]) await answer(value);
     assert.match(await page.locator(".tutor-card").innerText(),/Completado sin ayuda/);
+    await button("← Índice").tap();
+    await button("Empezar B6").tap();
+    await advanceTo("Magnitud inicial");
+    await page.setViewportSize({width:1440,height:900});
+    assert.equal(await page.locator('polyline[stroke="#ff394b"]').count(),0);
+    const bodePanel = page.locator(".tutor-visual-scroll").locator("..");
+    await bodePanel.screenshot({path:path.join(output,"b6-aportes-magnitud.png")});
+    await button("Fase").tap();
+    await bodePanel.screenshot({path:path.join(output,"b6-aportes-fase.png")});
+    assert.ok((await layers()).some(label => label.includes("Par de ceros complejos") && label.includes("180°")));
+    await button("Magnitud").tap();
+    await assisted();
+    const redPoints = () => page.locator('polyline[stroke="#ff394b"]').getAttribute("points");
+    assert.equal((await redPoints()).split(" ").length,1);
+    await advanceTo("Continuidad");
+    assert.equal((await redPoints()).split(" ").length,1);
+    await assisted();
+    assert.ok((await redPoints()).split(" ").length > 1);
+    await advanceTo("Suma de fase");
+    await assisted();
+    assert.equal((await redPoints()).split(" ").length,1);
+    await assisted();
+    assert.equal((await redPoints()).split(" ").length,2);
+    await finishPractice();
+    await button("Fase").tap();
+    await button("Magnitud").focus();
+    await page.keyboard.press("Alt+3");
+    assert.equal(await button("Aportes individuales").getAttribute("aria-pressed"),"true");
+    await page.keyboard.press("Alt+4");
+    assert.equal(await button("Suma por rectas").getAttribute("aria-pressed"),"true");
+    await bodePanel.screenshot({path:path.join(output,"b6-suma-fase.png")});
+    const phasePlot = page.getByRole("img",{name:"Fase en grados"});
+    assert.equal(await phasePlot.locator("polyline").last().getAttribute("stroke"),"#ff394b");
+    assert.ok(await phasePlot.locator("polyline").count()>1);
+    for (const angle of ["-90°","-45°","-135°","-225°","-270°"])
+      assert.ok(await phasePlot.locator("circle + text").allTextContents().then(labels=>labels.includes(angle)));
     assert.deepEqual(errors,[]);
-    console.log("Tutor: 33 ID; B1 completo y persistencia, examen R1, L5, D15 y E3; 360 y 390 px.");
+    console.log("Tutor: 54 ID; B1 completo y persistencia, examen R1, L5, D15 y E3; 360 y 390 px.");
   } finally {
     await browser.close();
   }

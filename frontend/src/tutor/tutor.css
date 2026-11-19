@@ -206,12 +206,8 @@ body:has(.tutor-shell) {
   vertical-align: middle;
   border-top: 2px solid;
 }
-.tutor-legend i[data-style="factor"] {
-  border-top-style: dotted;
-}
-.tutor-legend i[data-style="partial"] {
-  border-top-style: dashed;
-}
+.tutor-legend[aria-label="Trazos confirmados"] { font-size: .85rem; gap: .45rem 1rem; }
+
 .tutor-legend i[data-style="marker"] {
   border: 0;
   width: 7px;
@@ -410,3 +406,15 @@ body:has(.tutor-shell) {
   border-inline: 4px solid transparent;
   border-top: 7px solid currentColor;
 }
+
+.tutor-formula, .tutor-preview { max-width: 100%; overflow-x: auto; padding-block: .35em; }
+
+.tutor-decade { text-align: center; font-size: 11px; color: #eef4f5; }
+.tutor-shortcuts { display: block; margin: .5rem 0; line-height: 1.5; }
+.tutor .tutor-review { font-size: 1rem; line-height: 1.6; }
+.tutor .tutor-review :is(summary, label, select, p, li) { font-size: 1rem; }
+.tutor .tutor-review .katex { font-size: 1.35em; }
+.tutor .tutor-option input[type="radio"] { width: 1.1rem; min-width: 1.1rem; flex: none; }
+
+.tutor .tutor-current-answer { border: 0; padding: 0; margin: 0; min-width: 0; }
+.tutor-revealed { padding: .75rem; border-left: 3px solid var(--tutor-gold); }

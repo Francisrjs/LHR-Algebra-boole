@@ -108,6 +108,11 @@ function compile(text: string) {
   return { evaluate, names };
 }
 
+export function expressionError(source: string) {
+  try { compile(source); return ""; }
+  catch (error) { return error instanceof Error ? error.message : "Expresión incompleta"; }
+}
+
 export function scalar(source: string) {
   try {
     const { names, evaluate } = compile(source);

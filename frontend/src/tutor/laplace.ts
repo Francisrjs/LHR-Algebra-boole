@@ -3,6 +3,7 @@ import {
   expression,
   numeric,
   questions,
+  partial as partialSource,
   type Exercise,
   type Question,
 } from "./exercise";
@@ -70,7 +71,7 @@ const partial = (term: string, value: number, hint: string) =>
 const limit = (prompt: string, value: number, hint: string, why: string) =>
   numeric("Valor final", prompt, value, hint, why);
 
-export const laplaceExercises = [
+const originalLaplaceExercises = [
   lesson(
     "E1",
     "26 y 63",
@@ -353,4 +354,72 @@ export const laplaceExercises = [
     ],
     "La tabla por tipo del manuscrito presupone estabilidad. Con n ≥ 2, este lazo concreto no es Hurwitz.",
   ),
+];
+
+const split = (answer: string, hint: string) =>
+  expression("Fracciones simples", "Escribí la descomposición completa de C(s).", answer,
+    hint, "La suma de las fracciones reconstruye C(s) y cada término tiene una inversa tabulada.");
+const finalValue = (poles: string, distractors: string[], explanation: string) =>
+  choose("Condición del valor final", "¿Cuáles son los polos de sE(s) para E=R−C?",
+    [poles, ...distractors], 0, "Formá E(s) y simplificá sE(s) antes de leer sus polos.", explanation);
+const tracking = (value: number, explanation: string) =>
+  limit("¿Cuánto vale el error estacionario de seguimiento r−c?", value,
+    "Calculá el límite de r(t)−c(t) o de s[R(s)−C(s)].", explanation);
+const conditions = "Usá condiciones iniciales nulas y t ≥ 0. Hallá c(t) y el error estacionario.";
+
+const partialLaplaceExercises = [
+  lesson("P2.1", "3", "T = 6/[(s+2)(s+3)], H = 1, r(t) = 10", conditions, [
+    input("10"), output("60/(s(s+2)(s+3))"),
+    split("10/s-30/(s+2)+20/(s+3)", "Calculá los residuos en 0, −2 y −3."),
+    response("10-30exp(-2t)+20exp(-3t)", "Cada polo simple en −a produce exp(−at)."),
+    finalValue("−2 y −3", ["0, −2 y −3", "2 y 3"], "Multiplicar E por s elimina el polo de la entrada escalón."),
+    tracking(0, "La salida final vale 10 y sigue exactamente al escalón."),
+  ]),
+  lesson("P2.2", "3", "T = 9/(s+3)², H = 1, r(t) = 4", conditions, [
+    input("4"), output("36/(s(s+3)^2)"),
+    split("4/s-4/(s+3)-12/(s+3)^2", "Incluí tanto 1/(s+3) como 1/(s+3)²."),
+    choose("Polo repetido", "¿Qué término aporta un factor t al invertir C(s)?",
+      ["1/(s+3)²", "1/(s+3)", "1/s"], 0, "Recordá la transformada de t·exp(−3t).",
+      "La derivada respecto de s de 1/(s+3) corresponde a multiplicar por −t."),
+    response("4-4exp(-3t)-12t*exp(-3t)", "El residuo del polo doble multiplica t·exp(−3t)."),
+    finalValue("−3 doble", ["0 y −3", "−3 simple"], "Los dos factores s+3 se mantienen en el denominador de sE(s)."),
+    tracking(0, "Ambos transitorios decaen y c(∞)=4."),
+  ]),
+  lesson("P2.3", "3", "T = 10/(s²+4s+13), H = 1, r(t) = 5", conditions, [
+    input("5"), output("50/(s(s^2+4s+13))"),
+    split("50/(13s)-50(s+2)/(13((s+2)^2+9))-100/(13((s+2)^2+9))",
+      "Completá (s+2)²+9 y escribí el numerador del transitorio en función de s+2."),
+    response("(50/13)*(1-exp(-2t)*(cos(3t)+(2/3)*sin(3t)))",
+      "El término con s+2 da coseno. Para el seno el numerador tabulado es 3."),
+    finalValue("−2 ± 3j", ["+2 ± 3j", "±3j"], "El desplazamiento s+2 produce amortiguamiento."),
+    tracking(15/13, "La diferencia final es 5−50/13."),
+  ]),
+  lesson("P2.4", "3", "T = 2/(s+2), H = 1, r(t) = 2t", conditions, [
+    expression("Entrada", "Escribí R(s) para la rampa.", "2/s^2",
+      "La transformada de t es 1/s².", "La pendiente 2 multiplica esa transformada."),
+    output("4/(s^2(s+2))"),
+    split("2/s^2-1/s+1/(s+2)", "El polo doble está en el origen."),
+    response("2t-1+exp(-2t)", "Invertí por separado la rampa, la constante y la exponencial."),
+    finalValue("−2", ["0 y −2", "0"], "Los términos de rampa se cancelan y sE(s)=2/(s+2)."),
+    tracking(1, "El error es 1−exp(−2t) aunque r y c crecen sin límite."),
+  ]),
+  lesson("P2.5", "3", "G = 8/(s+2), H = 1/2, r(t) = 6",
+    conditions + " El retorno es negativo. Calculá también el error del comparador.", [
+      closed("8/(s+6)"), input("6"), output("48/(s(s+6))"),
+      split("8/s-8/(s+6)", "Igualá numeradores sobre s(s+6)."),
+      response("8*(1-exp(-6t))", "El término constante viene del polo en el origen."),
+      finalValue("−6", ["0 y −6", "+6"], "El error de seguimiento y el de comparador dan polos estables tras multiplicar por s."),
+      tracking(-2, "La salida final supera en dos unidades a la referencia."),
+      limit("¿Cuánto vale el error estacionario del comparador r−Hc?", 2,
+        "La señal que llega a la entrada inversora es la mitad de la salida.",
+        "Con r=6, c=8 y H=1/2, el sumador entrega 6−4=2."),
+    ], "Fe de erratas de la p. 3: el error del comparador es +2. El error de seguimiento es −2."),
+];
+
+export const laplaceExercises = [
+  ...originalLaplaceExercises,
+  ...partialLaplaceExercises.map((exercise, index) => ({
+    ...exercise,
+    partial: partialSource(["Polos simples", "Polo doble", "Polos complejos", "Entrada rampa", "Retorno no unitario"][index]),
+  })),
 ];

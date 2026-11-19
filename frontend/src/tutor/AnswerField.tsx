@@ -1,7 +1,8 @@
 import { useId, useRef, useState } from "react";
 import type { RefObject } from "react";
-import BlockFormula from "../BlockFormula";
-import type { Step } from "./session";
+import { DraftFormula, TutorText } from "./TutorMath";
+import { expressionError } from "./expressions";
+import { numberParts, type Step } from "./session";
 
 export default function AnswerField({
   step, value, onChange, choices, inputRef, label = "Tu respuesta", error, focusError,
@@ -21,6 +22,8 @@ export default function AnswerField({
   const [pad, setPad] = useState(false);
   const numeric = typeof step.answer === "object";
   const unit = numeric && typeof step.answer === "object" ? step.answer.unit : undefined;
+  const parts = typeof step.answer === "object" ? numberParts(value, step.answer) : { expression: value, unit: "" };
+  const previewError = (numeric || step.expression) && value.trim() ? expressionError(parts.expression) : "";
   const math = numeric || step.expression;
   const keys = [
     "-", "+", "*", "/", "^", "(", ")", ",", "sqrt(", "pi",
@@ -55,7 +58,7 @@ export default function AnswerField({
                 } : undefined}
                 onChange={() => onChange(choice)}
               />
-              {choice}
+              {step.expression ? <DraftFormula value={choice}/> : <TutorText value={choice}/>}
             </label>
           ))}
         </fieldset>
@@ -94,9 +97,9 @@ export default function AnswerField({
               </div>
             </>
           )}
-          {step.expression && value.trim() && (
+          {math && value.trim() && (
             <div className="tutor-preview" aria-label="Vista previa">
-              <BlockFormula expression={value} />
+              {previewError ? <span role="status">{previewError}</span> : <><DraftFormula value={parts.expression}/> {parts.unit}</>}
             </div>
           )}
         </>

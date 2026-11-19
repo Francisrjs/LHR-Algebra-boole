@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { bodeExercises } from "./bode";
-import { blockExercises, type Diagram } from "./blocks";
+import { blockReductions, blockExercises, type Diagram } from "./blocks";
 import { laplaceExercises } from "./laplace";
-import { locusExercises, routhExercise } from "./locus";
+import { guidedLocusExercises, locusExercises, routhCells, routhExercise } from "./locus";
 import { manualValue } from "../bodeManual";
 import { accepts, display, examStep, start, submit } from "./session";
 import { equivalent, scalar } from "./expressions";
+import type { Exercise } from "./exercise";
 
-const all = [
+const all: Exercise[] = [
   ...bodeExercises,
   ...locusExercises,
   routhExercise,
@@ -16,9 +17,14 @@ const all = [
 ];
 
 describe("tutor", () => {
-  it("includes exactly the 33 originals and accepts their reference answers", () => {
-    expect(new Set(all.map((e) => e.id)).size).toBe(33);
-    expect(all).toHaveLength(33);
+  it("preserves the original catalog and accepts the answers across its 54 exercises", () => {
+    const originalIds = [["B", 6], ["L", 6], ["D", 15], ["E", 6]] as const;
+    expect(all.filter((e) => !e.partial).map((e) => e.id).sort()).toEqual([
+      "R1", ...originalIds.flatMap(([prefix, count]) =>
+        Array.from({ length: count }, (_, i) => prefix + (i + 1))),
+    ].sort());
+    expect(new Set(all.map((e) => e.id)).size).toBe(54);
+    expect(all).toHaveLength(54);
     for (const exercise of all) {
       expect(exercise.page).toBeTruthy();
       let attempt = start(exercise.id, "Intermedio");
@@ -28,6 +34,24 @@ describe("tutor", () => {
       }
       expect(attempt.complete, exercise.id).toBe(true);
     }
+  });
+
+  it("reveals B2 corner symbols and slopes at their own steps", () => {
+    const b2 = bodeExercises[1];
+    const labels = (concept: string) => b2.layers.mag
+      .filter(([stage]) => b2.steps[stage].concept === concept)
+      .map(([, layer]) => layer.label);
+    expect(labels("Factores")).toContain("× Polo doble · 1 rad/s");
+    expect(labels("Factores")).toContain("○ Cero simple · 10 rad/s");
+    expect(labels("Factores").join(" ")).toContain("-40 dB/década");
+    expect(labels("Factores").join(" ")).toContain("+20 dB/década");
+  });
+
+  it("sums the seven guide frequencies in the complex-zero example", () => {
+    const example = bodeExercises.find(e => e.id === "B6")!;
+    const values = [0.01,0.1,1,10,100,1000,10000].map(w => manualValue(example.decomposition,w));
+    expect(values.map(v => v.phase)).toEqual([-90,-90,-45,-45,-135,-225,-270]);
+    expect(values.map(v => v.magnitude)).toEqual([60,40,20,20,0,-40,-100]);
   });
 
   it("handles units, decimal commas, equivalent expressions and unknown symbols", () => {
@@ -97,6 +121,19 @@ describe("tutor", () => {
     expect(finite(b5, "−180°")).toHaveLength(0);
   });
 
+  it("grades the guided LGR choices and aligns each Routh cell and crossing", () => {
+    for (const ex of guidedLocusExercises) {
+      expect(ex.steps.filter(s => s.concept === "Derivar D")).toHaveLength(1);
+      for (const s of ex.steps) {
+        expect(accepts(s,display(s.answer)),s.id).toBe(true);
+        if (s.choices) expect(s.choices.filter(v => accepts(s,v)),s.id).toHaveLength(1);
+      }
+      for (const cell of routhCells(ex)) expect(ex.steps[cell.stage].answer).toBe(cell.label);
+      for (const l of ex.layers.filter(l => l.kind === "crossing")) expect(ex.steps[l.stage].concept).toBe("Cruce imaginario");
+    }
+    expect(guidedLocusExercises.find(e=>e.id==="L5")!.steps.find(s=>s.concept==="Ganancia de ruptura")?.answer).toBe("0,6311");
+  });
+
   it("keeps the L5 centroid, critical gain and crossing in different stages", () => {
     const l5 = locusExercises.find((e) => e.id === "L5")!;
     const center = l5.layers.find((l) => l.kind === "center")!;
@@ -111,7 +148,7 @@ describe("tutor", () => {
     expect(critical).toBeLessThan(cross.stage);
   });
 
-  it("checks each original block equivalent against the diagram's own signal equations", () => {
+  it("checks each block equivalent against the diagram's own signal equations", () => {
     const vars = {
       s: 2.73,
       g1: 0.21,
@@ -139,6 +176,14 @@ describe("tutor", () => {
       );
     }
     for (const exercise of blockExercises) {
+      const reduction = blockReductions[exercise.id];
+      for (const {diagram, stage} of (reduction?.transformed ?? exercise.transformed ?? [])) {
+        const input = diagram.nodes[0][0];
+        const output = diagram.nodes.some(([id]) => id === "Y") ? "Y" : "C";
+        expect(solve(diagram,input,output,value), exercise.id+" paso "+stage)
+          .toBeCloseTo(solve(exercise.diagram,input,output,value),8);
+      }
+      for (const step of reduction?.steps ?? []) expect(accepts(step,display(step.answer)),step.id).toBe(true);
       for (const step of exercise.steps.filter(
         (s) => s.concept === "Equivalente",
       )) {
@@ -147,7 +192,7 @@ describe("tutor", () => {
         expect(actual, step.id).toBeCloseTo(value(step.answer as string), 9);
       }
     }
-    const d15 = blockExercises.at(-1)!;
+    const d15 = blockExercises.find((e) => e.id === "D15")!;
     const invalid = {
       ...d15.diagram,
       edges: d15.diagram.edges.map((e) =>
@@ -173,6 +218,60 @@ describe("tutor", () => {
       value(d10.steps.at(-1)!.answer as string),
       6,
     );
+  });
+
+  it("detects a sign change and a wrong takeoff in partial block diagrams", () => {
+    const at = (expression: string) => scalar(expression.replace(/s/g, "(2.73)"));
+    const p12 = blockExercises.find((e) => e.id === "P1.2")!.diagram;
+    const p15 = blockExercises.find((e) => e.id === "P1.5")!.diagram;
+    const reversed: Diagram = { ...p12, edges: p12.edges.map(([from, to, sign, via]) =>
+      [from, to, from === ".X" && to === "Σ2" ? "−" : sign, via]) };
+    const moved: Diagram = { ...p15, edges: p15.edges.map(([from, to, sign, via]) =>
+      [from === ".Y" && to === "Σ3" ? ".X" : from, to, sign, via]) };
+    for (const [original, invalid] of [[p12, reversed], [p15, moved]]) {
+      expect(solve(invalid, "R", "C", at)).not.toBeCloseTo(solve(original, "R", "C", at), 5);
+    }
+  });
+
+  it("checks both stationary errors with the comparator convention", () => {
+    const p25 = laplaceExercises.find((e) => e.id === "P2.5")!;
+    const [tracking, comparator] = p25.steps.slice(-2);
+    expect(accepts(tracking, "-2")).toBe(true);
+    expect(accepts(tracking, "2")).toBe(false);
+    expect(accepts(comparator, "+2")).toBe(true);
+    expect(accepts(comparator, "1,2")).toBe(false);
+  });
+
+  it("compares signed exact Bode margins with the handout references", () => {
+    const values = [[54.90, 21.74], [-19.34, -13.56], [-21.88, 21.88], [-62.87, -34.07], [19.99]];
+    values.forEach((expected, index) => {
+      const exercise = bodeExercises.find((e) => e.id === "P3." + (index + 1))!;
+      const exactStart = exercise.steps.findIndex((step) => step.concept === "Modelo exacto");
+      const margins = exercise.steps.slice(exactStart).filter((step) =>
+        step.concept === "Márgenes" && typeof step.answer === "object");
+      expect(margins).toHaveLength(expected.length);
+      margins.forEach((step, i) => {
+        expect(accepts(step, String(expected[i])), step.id).toBe(true);
+        expect(accepts(step, String(expected[i] + 0.3)), step.id).toBe(false);
+      });
+    });
+    const p33 = bodeExercises.find((e) => e.id === "P3.3")!;
+    const directions = p33.steps.filter((step) => step.concept === "Sentido del cruce");
+    expect(directions.map((step) => step.answer)).toEqual(["Ascendente", "Descendente"]);
+    const p35 = bodeExercises.find((e) => e.id === "P3.5")!;
+    const [magnitude, phase] = (["mag", "phase"] as const).map((axis) => {
+      const curve = p35.layers[axis].find(([, layer]) => layer.style === "exact")![1];
+      return curve.points.find(([omega]) => Math.abs(omega - 1) < 1e-12) ??
+        curve.points.reduce((nearest, point) =>
+          Math.abs(point[0] - 1) < Math.abs(nearest[0] - 1) ? point : nearest);
+    });
+    const [omega, mag] = magnitude;
+    const gain = 10 * Math.hypot(1 - omega ** 2, omega) /
+      (omega * Math.hypot(1, omega / 10) * Math.hypot(1, omega / 100) * Math.hypot(1, omega / 1000));
+    expect(mag).toBeCloseTo(20 * Math.log10(gain), 9);
+    const [w, angle] = phase;
+    expect(angle).toBeCloseTo((Math.atan2(w, 1 - w ** 2) - Math.PI / 2 -
+      Math.atan(w / 10) - Math.atan(w / 100) - Math.atan(w / 1000)) * 180 / Math.PI, 9);
   });
 });
 
